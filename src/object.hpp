@@ -1,19 +1,24 @@
 #pragma once
 #include <iostream>
-#include <string>
 using namespace std;
 
 class object {
 public:
-    virtual void loadFromString(const char*)=0;               
-    virtual char* uploadInString()=0;
-    virtual ofstream writeInBinary(ofstream, object)=0;
-    virtual ifstream readFromBinary(ifstream, object)=0;
-    virtual int getId()=0;
-    virtual char* getName()=0;
-    virtual bool isEqual(object)=0;
-    virtual void unionObj()=0;
-    virtual void makeCopy()=0;
+    object() {}
+    
+    virtual object* loadFromString(char*) = 0;               
+    virtual char* uploadInString() = 0;
+    virtual void writeInBinary(ofstream&) {}
+    virtual void readFromBinary(ifstream&) {}
+    virtual void writeInTxt(ofstream&) {}
+    virtual void readFromTxt(ifstream&) {}
+    virtual int getId() = 0;
+    virtual char* getName() = 0;
+    virtual int equals(object*) = 0;
+    virtual object* unionObj(object*, object*) = 0;
+    virtual object* makeCopy(object*) = 0;
+
+    virtual ~object() {}
 
 private:
 

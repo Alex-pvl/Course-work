@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "iosfwd": "cpp",
+        "*.tcc": "cpp",
+        "fstream": "cpp",
+        "new": "cpp",
+        "ostream": "cpp"
+    },
+
+    "testMate.cpp.test.executables": "a.txt",
+    "testMate.cpp.log.logSentry": "disable_3"
+}
+
+
+   
