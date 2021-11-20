@@ -5,7 +5,8 @@
         "*.tcc": "cpp",
         "fstream": "cpp",
         "new": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "stdexcept": "cpp"
     },
 
     "testMate.cpp.test.executables": "a.txt",

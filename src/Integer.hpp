@@ -6,7 +6,7 @@
 #include "object.hpp"
 using namespace std;
 
-// для записи в строку
+// длина числа
 int getSize(int n) {
     int size = 0, val = n;
     while (val > 0) {
@@ -19,10 +19,10 @@ int getSize(int n) {
 class Integer : public object {
 public:
     Integer();
-    Integer(int value);
+    Integer(int);
 
     int getValue();
-    void setValue(int value);
+    void setValue(int);
 
     // перевод строки в число
     object* loadFromString(char*);
@@ -52,12 +52,7 @@ public:
     friend Integer operator-(const Integer&, const Integer&);
 
     Integer& operator++();
-    Integer operator++(int);
-
-    friend ostream& operator<<(ostream&, Integer&);
-	friend istream& operator>>(istream&, Integer&);
-	friend ofstream& operator<<(ofstream&, Integer&);
-	friend ifstream& operator>>(ifstream&, Integer&);
+    Integer& operator--();
 
     ~Integer();
 private:
@@ -81,14 +76,8 @@ void Integer::setValue(int value) {
 }
 
 object* Integer::loadFromString(char *str) {
-    int r = 0;
-    int n = strlen(str)-1;
-    for (int i = 0; i < strlen(str); i++) {
-        r += (str[i] - '0') * pow(10, n);
-        n--;
-    }
-    object* res = new Integer(r);
-    return res;
+    this->value = atoi(str);
+    return this;
 }
 
 char* Integer::uploadInString() {
@@ -115,27 +104,30 @@ int Integer::equals(object* o) {
 }
 
 object* Integer::unionObj(object* o1, object* o2) {
-    object* res = new Integer(0);
-    int sum = ((Integer*) o1)->getValue() + ((Integer*) o2)->getValue();
-    ((Integer*) res)->setValue(sum);
-    return res;
+    object* r = new Integer;
+	((Integer*)r)->value += ((Integer*)o1)->value;
+	((Integer*)r)->value += ((Integer*)o2)->value;
+	value = ((Integer*)r)->value;
+	return r;
 }
 
 object* Integer::makeCopy(object* o) {
     int newVal = ((Integer*) o)->getValue();
-    return new Integer(newVal);;
+    return new Integer(newVal);
 }
 
 void Integer::writeInBinary(ofstream& fout) {
     int id = getId();
     fout.write((char*)&id, sizeof(int));
     fout.write((char*)&value, sizeof(int));
+    fout.close();
 }
     
 void Integer::readFromBinary(ifstream& fin) {
     int id;
     fin.read((char*)&id, sizeof(int));
     fin.read((char*)&value, sizeof(int));
+    fin.close();
 }
 
 void Integer::writeInTxt(ofstream& fout) {
@@ -166,36 +158,15 @@ Integer& Integer::operator++() {
     return *this;
 }
 
-Integer Integer::operator++(int) {
-    Integer temp = *this;
-    ++*this;
-    return temp;
+Integer& Integer::operator--() {
+    this->value = this->value - 1;
+    return *this;
 }
 
 Integer operator-(const Integer& first, const Integer& second) {
     Integer res;
     res.value = first.value - second.value;
     return res;
-}
-
-ostream& operator<<(ostream& os, Integer& n) {
-	os << n.value;
-	return os;
-}
-
-istream& operator>>(istream& is, Integer& n) {
-	is >> n.value;
-	return is;
-}
-
-ofstream& operator<<(ofstream& os, Integer& n) {
-	os << &n.value;
-	return os;
-}
-
-ifstream& operator>>(ifstream& is, Integer& n) {
-	is >> n.value;
-	return is;
 }
 
 Integer::~Integer() {
