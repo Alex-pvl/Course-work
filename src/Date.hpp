@@ -62,10 +62,7 @@ public:
     void writeInTxt(ofstream&);
     // чтение объекта из текстового файла
     void readFromTxt(ifstream&);
-
-    friend Date& operator+(Date& d ,int hours);
-    friend Date& operator-(Date& d ,int hours);
-
+    
     Date& operator=(const Date& d);
 
     ~Date();
@@ -79,27 +76,27 @@ private:
 };
 
 Date::Date() {
-    this->setDay(1);
-    this->setMonth(1);
-    this->setYear(1);
-    this->setHour(0);
-    this->setMinute(0);
-    this->setSecond(0);
+    this->day = 1;
+    this->mon = 1;
+    this->year = 1;
+    this->h = 0;
+    this->m = 0;
+    this->s = 0;
 }
 
 Date::Date(int day, int mon, int year) {
-    this->setDay(day);
-    this->setMonth(mon);
-    this->setYear(year);
-    this->setHour(0);
-    this->setMinute(0);
-    this->setSecond(0);
+    this->day = day;
+    this->mon = mon;
+    this->year = year;
+    this->h = 0;
+    this->m = 0;
+    this->s = 0;
 }
 
 Date::Date(int day, int mon, int year, int h, int m, int s) : Date::Date(day, mon, year) {
-    this->setHour(h);
-    this->setMinute(m);
-    this->setSecond(s);
+    this->h = h;
+    this->m = m;
+    this->s = s;
 }
 
 int Date::getDay() { 
@@ -350,16 +347,6 @@ void Date::decSecond() {
     }
 }
 
-Date& operator+(Date& d, int hours) {
-    for (; hours > 0; hours--) d.incHour();
-    return d;
-} 
-
-Date& operator-(Date& d, int hours) {
-    for (; hours > 0; hours--) d.decHour();
-    return d;
-}
-
 object* Date::loadFromString(char *date) {
     int day, mon, year, h, m, s;
     if (date[0] == 0) {
@@ -374,7 +361,7 @@ object* Date::loadFromString(char *date) {
     }
     if (date[6] == 0) {
         if (date[7] == 0) {
-            if (date[8] == 0) {                // 12/45/7890 11:11:11
+            if (date[8] == 0) {                
                 year = date[9] - '0';
             } else {
                 year = 10 * (date[8] - '0') + date[9] - '0';
@@ -423,69 +410,161 @@ int Date::getId() {
 }
 
 int Date::equals(object* o) {
-    // if (this->day > ((Date*) o)->value) return 1;
-    // else if (this->value < ((Integer*) o)->value) return -1;
-    // else return 0;
-    return 0;
+    int first_d = 0, first_s = 0, second_d = 0, second_s = 0;
+
+    for (int i = 1; i < this->getYear(); i++) {
+        if (i % 4 == 0 || ((i % 100 != 0) && (i % 400 == 0))) {
+            first_d += 366;
+        } else first_d += 365;
+    }
+    for (int i = 1; i < this->getMonth(); i++) {
+        if (i == 4 || i == 6 || i == 9 || i == 11) {
+            first_d += 30;
+        } else if (i == 2) {
+            if (this->getYear() % 4 == 0 || ((this->getYear() % 100 != 0) && (this->getYear() % 400 == 0))) {
+                first_d += 29;
+            } else first_d += 28;
+        } else first_d += 31;
+    }
+    first_d += this->getDay();
+
+    first_s += 3600 * this->getHour() + 60 * this->getMinute() + this->getSecond();
+
+    for (int i = 1; i < ((Date*)o)->getYear(); i++) {
+        if (i % 4 == 0 || ((i % 100 != 0) && (i % 400 == 0))) {
+            second_d += 366;
+        } else second_d += 365;
+    }
+    for (int i = 1; i < ((Date*)o)->getMonth(); i++) {
+        if (i == 4 || i == 6 || i == 9 || i == 11) {
+            second_d += 30;
+        } else if (i == 2) {
+            if (((Date*)o)->getYear() % 4 == 0 || ((((Date*)o)->getYear() % 100 != 0) && (((Date*)o)->getYear() % 400 == 0))) {
+                second_d += 29;
+            } else second_d += 28;
+        } else second_d += 31;
+    }
+    second_d += ((Date*)o)->getDay();
+
+    second_s += 3600 * ((Date*)o)->getHour() + 60 * ((Date*)o)->getMinute() + ((Date*)o)->getSecond();
+
+    if (first_d > second_d) return 1;
+    else if ((first_d == second_d) && (first_s > second_s)) return 1;
+    else if ((first_d == second_d) && (first_s < second_s)) return -1;
+    else if (first_d < second_d) return -1;
+    else return 0;
 }
 
 object* Date::unionObj(object* o1, object* o2) {
-    object* r = new Date;
-	((Date*)r)->day += ((Date*)o1)->day;
-	((Date*)r)->mon += ((Date*)o1)->mon;
-    ((Date*)r)->year += ((Date*)o1)->year;
-    ((Date*)r)->h += ((Date*)o1)->h;
-    ((Date*)r)->m += ((Date*)o1)->m;
-    ((Date*)r)->s += ((Date*)o1)->s;
-    ((Date*)r)->day += ((Date*)o2)->day;
-	((Date*)r)->mon += ((Date*)o2)->mon;
-    ((Date*)r)->year += ((Date*)o2)->year;
-    ((Date*)r)->h += ((Date*)o2)->h;
-    ((Date*)r)->m += ((Date*)o2)->m;
-    ((Date*)r)->s += ((Date*)o2)->s;
-	day = ((Date*)r)->day;
-    mon = ((Date*)r)->mon;
-    year = ((Date*)r)->year;
-    h = ((Date*)r)->h;
-    m = ((Date*)r)->m;
-    s = ((Date*)r)->s;
-	return r;
+    for (int i = 0; i < ((Date*)o1)->s + ((Date*)o2)->s; i++) {
+        this->incSecond();
+    }
+    for (int i = 0; i < ((Date*)o1)->m + ((Date*)o2)->m; i++) {
+        this->incMinutes();
+    }
+    for (int i = 0; i < ((Date*)o1)->h + ((Date*)o2)->h; i++) {
+        this->incHour();
+    }
+    for (int i = 0; i < ((Date*)o1)->year + ((Date*)o2)->year - 1; i++) {
+        this->incYear();
+    }
+    for (int i = 0; i < ((Date*)o1)->mon + ((Date*)o2)->mon - 1; i++) {
+        this->incMonth();
+    }
+    for (int i = 0; i < ((Date*)o1)->day + ((Date*)o2)->day - 1; i++) {
+        this->incDay();
+    }
+    return this;
 }
 
 object* Date::makeCopy(object* o) {
-    int day = ((Date*) o)->getDay();
-    int mon = ((Date*) o)->getMonth();
-    int year = ((Date*) o)->getYear();
-    int h = ((Date*) o)->getHour();
-    int m = ((Date*) o)->getMinute();
-    int s = ((Date*) o)->getSecond();
-    return new Date(day, mon, year, h, m, s);
+    this->day = ((Date*) o)->day;
+    this->mon = ((Date*) o)->mon;
+    this->year = ((Date*) o)->year;
+    this->h = ((Date*) o)->h;
+    this->m = ((Date*) o)->m;
+    this->s = ((Date*) o)->s;
+    return this;
 }
 
 void Date::writeInBinary(ofstream& fout) {
-    // int id = getId();
-    // fout.write((char*)&id, sizeof(int));
-    // fout.write((char*)&value, sizeof(int));
-    // fout.close();
+    int id = getId();
+    fout.write((char*)&id, sizeof(int));
+    fout.write((char*)&day, sizeof(int));
+    fout.write((char*)&mon, sizeof(int));
+    fout.write((char*)&year, sizeof(int));
+    fout.write((char*)&h, sizeof(int));
+    fout.write((char*)&m, sizeof(int));
+    fout.write((char*)&s, sizeof(int));
+    fout.close();
 }
     
 void Date::readFromBinary(ifstream& fin) {
-    // int id;
-    // fin.read((char*)&id, sizeof(int));
-    // fin.read((char*)&value, sizeof(int));
-    // fin.close();
+    int id;
+    fin.read((char*)&id, sizeof(int));
+    fin.read((char*)&day, sizeof(int));
+    fin.read((char*)&mon, sizeof(int));
+    fin.read((char*)&year, sizeof(int));
+    fin.read((char*)&h, sizeof(int));
+    fin.read((char*)&m, sizeof(int));
+    fin.read((char*)&s, sizeof(int));
+    fin.close();
 }
 
 void Date::writeInTxt(ofstream& fout) {
-    // int id = getId();
-    // fout << id << " ";
-    // fout << this->getValue();
+    int id = getId();
+    fout << id << " ";
+    char *res = this->uploadInString();
+    fout << res << endl;
+    fout.close();
 }
 
 void Date::readFromTxt(ifstream& fin) {
-    // int id, n;
-    // fin >> id >> n;
-    // this->setValue(n);
+    int day, mon, year, h, m, s, id;
+    char date[10], time[8];
+    fin >> id;
+    fin >> date;
+    if (date[0] == 0) {
+        day = date[1] - '0';
+    } else {
+        day = 10 * (date[0]-'0') + date[1] - '0';
+    }
+    if (date[3] == 0) {
+        mon = date[4] - '0';
+    } else {
+        mon = 10 * (date[3] - '0') + date[4] - '0';
+    }
+    if (date[6] == 0) {
+        if (date[7] == 0) {
+            if (date[8] == 0) {
+                year = date[9] - '0';
+            } else {
+                year = 10 * (date[8] - '0') + date[9] - '0';
+            }
+        } else {
+            year = 100 * (date[7] - '0') + 10 * (date[8] - '0') + date[9] - '0';
+        }
+    } else {
+        year = 1000 * (date[6] - '0') + 100 * (date[7] - '0') + 10 * (date[8] - '0') + date[9] - '0';
+    }
+    this->setDay(day); this->setMonth(mon); this->setYear(year);
+    fin >> time;
+    if (time[0] == 0) {
+        h = time[1] - '0';
+    } else {
+        h = 10 * (time[0] - '0') + time[1] - '0';
+    }
+    if (time[3] == 0) {
+        m = time[4] - '0';
+    } else {
+        m = 10 * (time[3] - '0') + time[4] - '0';
+    }
+    if (time[6] == 0) {
+        s = time[7] - '0';
+    } else {
+        s = 10 * (time[6] - '0') + time[7] - '0';
+    }
+    this->setHour(h); this->setMinute(m); this->setSecond(s);
 }
 
 Date& Date::operator=(const Date& d) {

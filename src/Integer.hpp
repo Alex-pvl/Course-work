@@ -104,16 +104,14 @@ int Integer::equals(object* o) {
 }
 
 object* Integer::unionObj(object* o1, object* o2) {
-    object* r = new Integer;
-	((Integer*)r)->value += ((Integer*)o1)->value;
-	((Integer*)r)->value += ((Integer*)o2)->value;
-	value = ((Integer*)r)->value;
-	return r;
+	this->value += ((Integer*)o1)->value;
+	this->value += ((Integer*)o2)->value;
+	return this;
 }
 
 object* Integer::makeCopy(object* o) {
-    int newVal = ((Integer*) o)->getValue();
-    return new Integer(newVal);
+    this->value = ((Integer*) o)->value;
+    return this;
 }
 
 void Integer::writeInBinary(ofstream& fout) {

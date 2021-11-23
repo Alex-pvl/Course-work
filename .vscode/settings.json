@@ -6,7 +6,15 @@
         "fstream": "cpp",
         "new": "cpp",
         "ostream": "cpp",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "type_traits": "cpp",
+        "optional": "cpp",
+        "istream": "cpp",
+        "system_error": "cpp",
+        "array": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp"
     },
 
     "testMate.cpp.test.executables": "a.txt",
