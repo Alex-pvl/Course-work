@@ -118,14 +118,12 @@ void Integer::writeInBinary(ofstream& fout) {
     int id = getId();
     fout.write((char*)&id, sizeof(int));
     fout.write((char*)&value, sizeof(int));
-    fout.close();
 }
     
 void Integer::readFromBinary(ifstream& fin) {
     int id;
     fin.read((char*)&id, sizeof(int));
     fin.read((char*)&value, sizeof(int));
-    fin.close();
 }
 
 void Integer::writeInTxt(ofstream& fout) {

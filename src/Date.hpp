@@ -496,7 +496,6 @@ void Date::writeInBinary(ofstream& fout) {
     fout.write((char*)&h, sizeof(int));
     fout.write((char*)&m, sizeof(int));
     fout.write((char*)&s, sizeof(int));
-    fout.close();
 }
     
 void Date::readFromBinary(ifstream& fin) {
@@ -508,7 +507,6 @@ void Date::readFromBinary(ifstream& fin) {
     fin.read((char*)&h, sizeof(int));
     fin.read((char*)&m, sizeof(int));
     fin.read((char*)&s, sizeof(int));
-    fin.close();
 }
 
 void Date::writeInTxt(ofstream& fout) {
@@ -516,7 +514,6 @@ void Date::writeInTxt(ofstream& fout) {
     fout << id << " ";
     char *res = this->uploadInString();
     fout << res << endl;
-    fout.close();
 }
 
 void Date::readFromTxt(ifstream& fin) {

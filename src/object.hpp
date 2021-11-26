@@ -27,9 +27,5 @@ public:
     virtual void writeInTxt(ofstream&) {}
     // чтение объекта из текстового файла
     virtual void readFromTxt(ifstream&) {}
-
-    virtual ~object() {}
-
-private:
-
+    ~object() {}
 };
