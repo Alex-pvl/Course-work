@@ -27,9 +27,9 @@ public:
     // перевод строки в число
     object* loadFromString(char*);
     // перевод числа в строку
-    char* uploadInString();
+    string uploadInString();
     // получение имени класса
-    char* getName();
+    string getName();
     // получение идентификатора класса
     int getId();
     // сравнение двух объектов
@@ -46,6 +46,8 @@ public:
     void writeInTxt(ofstream&);
     // чтение объекта из текстового файла
     void readFromTxt(ifstream&);
+    // ввод числа с клавиатуры
+    void getObject();
 
     Integer& operator=(const Integer&);
     Integer operator+(const Integer&);
@@ -53,6 +55,9 @@ public:
 
     Integer& operator++();
     Integer& operator--();
+
+    friend ostream& operator<<(ostream&, Integer&);
+    friend istream& operator>>(istream&, Integer&);
 
     ~Integer();
 private:
@@ -80,17 +85,12 @@ object* Integer::loadFromString(char *str) {
     return this;
 }
 
-char* Integer::uploadInString() {
-    int n = getSize(this->getValue());
-    char* str = new char[n];
-    sprintf(str, "%d", this->getValue());
-    return str;
+string Integer::uploadInString() {
+    return to_string(this->value);
 }
 
-char* Integer::getName() {
-    char *i_name = new char[7];
-    strcpy(i_name, "Integer");
-    return i_name;
+string Integer::getName() {
+    return "Integer";
 }
 
 int Integer::getId() {
@@ -138,6 +138,10 @@ void Integer::readFromTxt(ifstream& fin) {
     this->setValue(n);
 }
 
+void Integer::getObject() {
+    cin >> this->value;
+}
+
 Integer& Integer::operator=(const Integer& n) {
     this->value = n.value;
     return *this;
@@ -163,6 +167,16 @@ Integer operator-(const Integer& first, const Integer& second) {
     Integer res;
     res.value = first.value - second.value;
     return res;
+}
+
+ostream& operator<<(ostream& os, Integer& i) {
+    os << i.value;
+    return os;
+}
+
+istream& operator>>(istream& is, Integer& i) {
+    is >> i.value;
+    return is;
 }
 
 Integer::~Integer() {

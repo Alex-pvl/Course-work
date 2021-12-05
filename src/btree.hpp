@@ -1,17 +1,46 @@
 #pragma once
 #include <iostream>
 #include "object.hpp"
+#include "Integer.hpp"
+#include "Date.hpp"
 using namespace std;
+
+int equal(object* o1, object* o2) {
+    if (((Integer*)o1)->getValue() > ((Date*)o2)->getYear()) return 1;
+    else if (((Integer*)o1)->getValue() < ((Date*)o2)->getYear()) return -1;
+    else if (((Integer*)o2)->getValue() > ((Date*)o1)->getYear()) return -1;
+    else if (((Integer*)o2)->getValue() < ((Date*)o1)->getYear()) return 1;
+    else if (((Integer*)o2)->getValue() == ((Date*)o1)->getYear()) return 0;
+    else if (((Integer*)o1)->equals((Integer*)o2) < 0) return -1;
+    else if (((Integer*)o1)->equals((Integer*)o2) > 0) return 1;
+    else if (((Integer*)o1)->equals((Integer*)o2) == 0) return 0;
+    else if ((Date*)o1->equals((Date*)o2) < 0) return -1;
+    else if ((Date*)o1->equals((Date*)o2) > 0) return 1;
+    else if ((Date*)o1->equals((Date*)o2) == 0) return 0;
+    else return 0;
+}
+
+class Node {
+public:
+    Node() : o(nullptr), left(nullptr), right(nullptr) {}
+    Node(object* obj) : o(obj), left(nullptr), right(nullptr) {}
+    ~Node();
+    friend class Btree;
+private:
+    object *o;
+    Node *left;
+    Node *right;
+};
 
 class Btree {
 public:
     Btree();
     // вставка
-    void insert(object*);
+    void insert();
     // удаление
-    object* del(object*);
+    object* del();
     // вывод структуры
-    char* show();
+    string show();
     // количество элементов
     int size();
     // проверка на пустоту
@@ -30,18 +59,6 @@ public:
     void readBin(ifstream&);
     ~Btree();
 private:
-    class Node {
-    public:
-        Node();
-        Node(object*);
-        ~Node();
-        friend class BTree;
-    private:
-        object *o;
-        Node *left;
-        Node *right;
-    };
-    
     Node *root;
     int count;
 };
@@ -51,13 +68,25 @@ Btree::Btree() {
     this->count = 0;
 }
 
-void Btree::insert(object* o) {}
+void Btree::insert() {
+    string type;
+    cout << "Write object's typename: ";
+    cin >> type;
+    if (type == "Integer") {
+        root->o = new Integer;
+    } else if (type == "Date") {
+        root->o = new Date;
+    } else {
+        cout << "Invalid typename. Try again.";
+        return;
+    }
+}
 
-object* Btree::del(object *o) {
+object* Btree::del() {
     return nullptr;
 }
 
-char* Btree::show() {
+string Btree::show() {
     return nullptr;
 } 
 

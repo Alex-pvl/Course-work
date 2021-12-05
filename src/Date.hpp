@@ -43,9 +43,9 @@ public:
     // перевод строки в дату
     object* loadFromString(char*);
     // перевод даты в строку
-    char* uploadInString();
+    string uploadInString();
     // получение имени класса
-    char* getName();
+    string getName();
     // получение идентификатора класса
     int getId();
     // сравнение двух объектов
@@ -62,8 +62,13 @@ public:
     void writeInTxt(ofstream&);
     // чтение объекта из текстового файла
     void readFromTxt(ifstream&);
+    // ввод числа с клавиатуры
+    void getObject();
     
     Date& operator=(const Date& d);
+
+    friend ostream& operator<<(ostream&, Date&);
+    friend istream& operator>>(istream&, Date&);
 
     ~Date();
 private:
@@ -392,17 +397,15 @@ object* Date::loadFromString(char *date) {
     return this;
 }
 
-char* Date::uploadInString() {
+string Date::uploadInString() {
     char* str = new char[19];
     sprintf(str, "%.2d/%.2d/%.4d %.2d:%.2d:%.2d", this->getDay(), this->getMonth(), this->getYear(), 
     this->getHour(), this->getMinute(), this->getSecond());
     return str;
 }
 
-char* Date::getName() {
-    char *d_name = new char[4];
-    strcpy(d_name, "Date");
-    return d_name;
+string Date::getName() {
+    return "Date";
 }
 
 int Date::getId() {
@@ -512,7 +515,7 @@ void Date::readFromBinary(ifstream& fin) {
 void Date::writeInTxt(ofstream& fout) {
     int id = getId();
     fout << id << " ";
-    char *res = this->uploadInString();
+    string res = this->uploadInString();
     fout << res << endl;
 }
 
@@ -564,6 +567,10 @@ void Date::readFromTxt(ifstream& fin) {
     this->setHour(h); this->setMinute(m); this->setSecond(s);
 }
 
+void Date::getObject() {
+    cin >> this->day >> this->mon >> this->year >> this->h >> this->m >> this->s;
+}
+
 Date& Date::operator=(const Date& d) {
     day = d.day;
     mon = d.mon;
@@ -572,6 +579,17 @@ Date& Date::operator=(const Date& d) {
     m = d.m;
     s = d.s;
     return *this;
+}
+
+ostream& operator<<(ostream& os, Date& d) {
+    os << ((Date*)&d)->uploadInString();
+    return os;
+}
+
+istream& operator>>(istream& is, Date& d) {
+    is >> ((Date*)&d)->day >> ((Date*)&d)->mon >> ((Date*)&d)->year >> 
+    ((Date*)&d)->h >> ((Date*)&d)->m >> ((Date*)&d)->s; 
+    return is;
 }
 
 Date::~Date() {

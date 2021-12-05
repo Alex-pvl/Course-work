@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Date.hpp"
 #include "Integer.hpp"
+#include <cstring>
 using namespace std;
 
 
@@ -17,13 +18,14 @@ int main() {
     // d->loadFromString(res);
     // char *t = d->uploadInString();
     // cout << t;
+    object *d1 = new Date(2,2,3,4,6,7);
+    object *d2 = new Date(7,11,1,5,7,4);
+    object *d = new Date;
+    
+    object *i = new Date;
+    cin >> *(Date*)i;
 
-    object *d1 = new Integer(2);
-    object *d2 = new Integer(7);
-    object *d = new Integer;
-    d->unionObj(d1, d2);
-    char *res = d->uploadInString();
-    cout << res;
+    cout << i;
     // char *res = d->uploadInString();
     // cout << res << endl;
     // object *d2 = new Date;
