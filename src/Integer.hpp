@@ -48,6 +48,7 @@ public:
     void readFromTxt(ifstream&);
     // ввод числа с клавиатуры
     void getObject();
+    int getValueObj();
 
     Integer& operator=(const Integer&);
     Integer operator+(const Integer&);
@@ -76,6 +77,10 @@ int Integer::getValue() {
     return this->value;
 }
 
+int Integer::getValueObj() {
+    return this->value;
+}
+
 void Integer::setValue(int value) {
     this->value = value;
 }
@@ -98,8 +103,9 @@ int Integer::getId() {
 }
 
 int Integer::equals(object* o) {
-    if (this->value > ((Integer*) o)->value) return 1;
-    else if (this->value < ((Integer*) o)->value) return -1;
+    int i1 = this->value, i2 = ((Integer*)o)->value;
+    if (i1 > i2) return 1;
+    else if (i1 < i2) return -1;
     else return 0;
 }
 
@@ -110,8 +116,8 @@ object* Integer::unionObj(object* o1, object* o2) {
 }
 
 object* Integer::makeCopy(object* o) {
-    this->value = ((Integer*) o)->value;
-    return this;
+    this->setValue(((Integer*) o)->getValue());
+    return ((Integer*)this);
 }
 
 void Integer::writeInBinary(ofstream& fout) {
@@ -129,7 +135,7 @@ void Integer::readFromBinary(ifstream& fin) {
 void Integer::writeInTxt(ofstream& fout) {
     int id = getId();
     fout << id << " ";
-    fout << this->getValue();
+    fout << this->value;
 }
 
 void Integer::readFromTxt(ifstream& fin) {

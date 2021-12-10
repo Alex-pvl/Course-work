@@ -19,6 +19,8 @@ public:
     int getMinute();
     int getSecond();
 
+    int getValue();
+
     void setYear(int);
     void setMonth(int);
     void setDay(int);
@@ -64,6 +66,7 @@ public:
     void readFromTxt(ifstream&);
     // ввод числа с клавиатуры
     void getObject();
+    int getValueObj();
     
     Date& operator=(const Date& d);
 
@@ -127,6 +130,11 @@ int Date::getMinute() {
 int Date::getSecond() { 
     return this->s; 
 }
+
+int Date::getValueObj() {
+    return this->year;
+}
+
 
 void Date::setYear(int year) {
     try
@@ -431,7 +439,7 @@ int Date::equals(object* o) {
     }
     first_d += this->getDay();
 
-    first_s += 3600 * this->getHour() + 60 * this->getMinute() + this->getSecond();
+    first_s += 3600 * (this->getHour() + 60 * this->getMinute() + this->getSecond());
 
     for (int i = 1; i < ((Date*)o)->getYear(); i++) {
         if (i % 4 == 0 || ((i % 100 != 0) && (i % 400 == 0))) {
@@ -481,13 +489,13 @@ object* Date::unionObj(object* o1, object* o2) {
 }
 
 object* Date::makeCopy(object* o) {
-    this->day = ((Date*) o)->day;
-    this->mon = ((Date*) o)->mon;
-    this->year = ((Date*) o)->year;
-    this->h = ((Date*) o)->h;
-    this->m = ((Date*) o)->m;
-    this->s = ((Date*) o)->s;
-    return this;
+    this->setDay(((Date*) o)->getDay());
+    this->setMonth(((Date*) o)->getMonth());
+    this->setYear(((Date*) o)->getYear());
+    this->setHour(((Date*) o)->getHour());
+    this->setMinute(((Date*) o)->getMinute());
+    this->setSecond(((Date*) o)->getSecond());
+    return (Date*)this;
 }
 
 void Date::writeInBinary(ofstream& fout) {
