@@ -6,17 +6,6 @@
 using namespace std;
 
 int equal(object* o1, object* o2) {
-    // if (sizeof(o1) == sizeof(Integer) && sizeof(o2) == sizeof(Date)) {
-    //     if (((Integer*)o1)->getValue() > ((Date*)o2)->getYear()) return 1;
-    //     else if (((Integer*)o1)->getValue() < ((Date*)o2)->getYear()) return -1;
-    //     else return 0;
-    // }
-    // else if (sizeof(o1) == sizeof(Date) && sizeof(o2) == sizeof(Integer)) {
-    //     if (((Integer*)o2)->getValue() < ((Date*)o1)->getYear()) return 1;
-    //     else if (((Integer*)o2)->getValue() > ((Date*)o1)->getYear()) return -1;
-    //     else return 0;
-    // }
-    // return o1->equals(o2);
     if (o1->getValueObj() < o2->getValueObj()) return -1;
     else if (o1->getValueObj() > o2->getValueObj()) return 1;
     else return 0;
@@ -72,22 +61,33 @@ public:
         return n->o;
     }
     // добавление
-    void add(object *obj) {
+    bool add(object *obj) {
         Node *n = new Node(obj);
-      
+        bool ins;
         if (!n) {
-            return;
+            return false;
         }
-        root = insertNode(root, n);
+        root = insertNode(root, n, ins);
+        return ins;
     }
     // вставка узла
-    Node* insertNode(Node *node, Node *elem) {
-        if (node == nullptr) return elem;
-    
-        if (equal(node->o, elem->o) < 0) 
-            node->left = insertNode(node->left, elem);
-        else node->right = insertNode(node->right, elem);
-
+    Node* insertNode(Node *node, Node *elem, bool &inserted) {
+        bool ins;
+        if (node == nullptr) {
+            inserted = true;
+            return elem;
+        }
+        if (equal(elem->o, node->o) < 0) {
+            node->left = insertNode(node->left, elem, ins);
+        }
+        else if (equal(elem->o, node->o) > 0) {
+            node->right = insertNode(node->right, elem, ins);
+        }
+        else {
+            inserted = false;
+            return node;
+        }
+        inserted = ins;
         return node;
     }
     // поиск элемента в дереве
@@ -108,24 +108,72 @@ public:
     }
     // вывод структуры
     void show() {
-        showNode(root);
+        showNode(root, 0);
     }
-    void showNode(Node *n) {
-        if (n != nullptr) {
-            cout << n->o->uploadInString() << "\n";
-            showNode(n->left);
-            showNode(n->right);
+    void showNode(Node *t, int level) {
+        if (t == nullptr) {
+            return;
         }
+        showNode(t->right, level + 1);
+        for (int i = 0; i < 3*level; i++) cout << " ";
+        cout << t->o->getId() << endl;
+        showNode(t->left, level+1);
+    }
+    bool deleteObj(object* obj) {
+        Node *n = new Node(obj);
+        bool del;
+        if (!n) {
+            return false;
+        }
+        root = deleteNodes(root, n, del);
+        return del;
+    }
+    Node* Del(Node *t, Node *t0) {
+        if (t->left != nullptr) {
+            t->left = Del(t->left, t0);
+            return t;
+        }
+        t0->o = t->o;
+        Node *x = t->right;
+        delete t;
+        return x;
     }
     // удаление узла
-    void deleteNodes(Node *n) {
-        if (!n) return;
-        delete n->o;
-        delete n->left;
-        delete n->right;
+    Node* deleteNodes(Node *r, Node *elem, bool &deleted) {
+        bool del;
+        if (r == nullptr) {
+            deleted = false;
+            return r;
+        }
+        if (equal(elem->o, r->o) < 0) {
+            r->left = deleteNodes(r->left, elem, del);
+            deleted = del;
+            return r;
+        }
+        else if (equal(elem->o, r->o) > 0) {
+            r->right = deleteNodes(r->right, elem, del);
+            deleted = del;
+            return r;
+        }
+        deleted = true;
+        if (r->left == nullptr && r->right == nullptr) {
+            delete r;
+            return nullptr;
+        }
+        if (r->left == nullptr) {
+            Node *x = r->right;
+            delete r;
+            return x;
+        }
+        if (r->right == nullptr) {
+            Node *x = r->left;
+            delete r;
+            return x;
+        }
+        r->right = Del(r->right, r);
     }
     ~Btree() {
-        deleteNodes(root);
+        
     }
 private:
     int count;
