@@ -521,10 +521,7 @@ void Date::readFromBinary(ifstream& fin) {
 }
 
 void Date::writeInTxt(ofstream& fout) {
-    int id = getId();
-    fout << id << " ";
-    string res = this->uploadInString();
-    fout << res << endl;
+    fout << year << endl;
 }
 
 void Date::readFromTxt(ifstream& fin) {

@@ -133,9 +133,7 @@ void Integer::readFromBinary(ifstream& fin) {
 }
 
 void Integer::writeInTxt(ofstream& fout) {
-    int id = getId();
-    fout << id << " ";
-    fout << this->value;
+    fout << value << endl;
 }
 
 void Integer::readFromTxt(ifstream& fin) {

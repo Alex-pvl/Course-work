@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include "object.hpp"
 #include "Integer.hpp"
 #include "Date.hpp"
@@ -183,17 +184,28 @@ public:
         }
         r->right = Del(r->right, r);
     }
-    void writeInBinary(ofstream& fout) {
-        root->o->writeInBinary(fout);
+    void writeInBinary(Node *t, int level) {
+        
     }
     void readFromBinary(ifstream& fin) {
-        root->o->readFromBinary(fin);
+        
     }
-    void writeInTxt(ofstream& fout) {
-        root->o->writeInBinary(fout);
+    void wrTxt() {
+        ofstream fout("BinaryTree.txt");
+        if (!fout.is_open()) cout << "Cannot open file.";
+        else {
+            writeInTxt(fout, root, 0);
+        } 
+    }
+    void writeInTxt(ofstream &fout, Node *t, int level) {
+        if (t == nullptr) return;
+        writeInTxt(fout, t->right, level+1);
+        for (int i = 0; i < 4*level; i++) fout << " ";
+        t->o->writeInTxt(fout);
+        writeInTxt(fout, t->left, level+1);
     }
     void readFromTxt(ifstream& fin) {
-        root->o->readFromTxt(fin);
+        
     }
     ~Btree() {
         if (root) delete root;

@@ -93,8 +93,9 @@ int main() {
         }
         // запись структуры в текстовый файл
         if (mode == "5") {
-            ofstream fout("btree.txt");
-            bt.writeInTxt(fout);
+            bt.wrTxt();
+            cout << "Binary Tree was written in the file.\n";
+            cout << "Wrtite command's id: ";
             cin >> mode;
         }
         // чтение структуры из текстовго файла
