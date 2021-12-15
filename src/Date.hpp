@@ -590,7 +590,7 @@ Date& Date::operator=(const Date& d) {
 }
 
 ostream& operator<<(ostream& os, Date& d) {
-    os << ((Date*)&d)->getId();
+    os << ((Date*)&d)->getValueObj();
     return os;
 }
 

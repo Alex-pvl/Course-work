@@ -176,7 +176,7 @@ Integer operator-(const Integer& first, const Integer& second) {
 }
 
 ostream& operator<<(ostream& os, Integer& i) {
-    os << ((Integer*)&i)->getId();
+    os << ((Integer*)&i)->getValueObj();
     return os;
 }
 

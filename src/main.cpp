@@ -7,78 +7,122 @@ using namespace std;
 
 
 int main() {
-    // object *i = new Integer;
-    // object *i1 = new Integer(2);
-    // object *i2 = new Integer(3);
-    // i->unionObj(i1, i2);
-    // char *res = i2->uploadInString();
-    // cout << res;
-    // char *res = new char[19];
-    // sprintf(res, "%s", "02/11/2222 12:21:23");
-    // object *d = new Date;
-    // d->loadFromString(res);
-    // char *t = d->uploadInString();
-    // cout << t;
-    // object *d1 = new Date(2,2,3,4,6,7);
-    // object *d2 = new Date(7,11,1,5,7,4);
-    // object *d = new Date;
-    
-    // object *i = new Date;
-    // cin >> *(Date*)i;
-
-    // cout << i;
-    // char *res = d->uploadInString();
-    // cout << res << endl;
-    // object *d2 = new Date;
-    // d2->makeCopy(d);
-    // char *rr = d2->uploadInString();
-    // cout << rr;
-    // ((Date*)d1)->incSecond();
-    // char *res = d1->uploadInString();
-    // cout << res; 
-
-    // cout << "Available commands:" << 
-    // "\n-create Binary Tree" << "\n\t-insert new object" << "\n\t\t-new Integer\n\t\t-new Date" << 
-    //                              "\n\t-delete by number" <<
-    //                              "\n\t-show" << 
-    //                              "\n\t-get size" <<
-    //                              "\n\t-is empty?" <<
-    //                              "\n\t-write to txt file" <<
-    //                              "\n\t-write to binary file" <<
-    //                              "\n\t-read from txt file" <<
-    //                              "\n\t-read from binary file" <<
-    // "\n-delete Binary Tree" << 
-    // "\n-quite\n";
-
-    // string mode;
-    // cin >> mode;
-
-    // if (mode == "help")
-    
+    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n\t[Integer]-new Integer\n\t[Date]-new Date\n[2]-delete object\n\t[Integer]-delete Integer\n\t[Date]-delete Date\n[3]-search\n\t[Integer]-search Integer\n\t[Date]-search Date\n[4]-show\n[5]-write to txt file\n[6]-write to binary file\n[7]-read from txt file\n[8]-read from binary file\n[9]-delete Binary Tree\n[10]-exit\n\n[0]-help\n\n\nWrtite command's id: ";
+    cout << commands;
     Btree bt;
-    object* o1 = new Integer(5);
-    object *o2 = new Date(1,2,3,4,5,6);
-    object *o3 = new Integer(7);
-    object *o4 = new Date(1,2,1,5,6,7);
-    bt.add(o1);
-    bt.add(o2);
-    bt.add(o3);
-    bt.add(o4);
-    
-    bt.show();
-    //cout << o1->getValueObj() << endl << o2->getValueObj() << endl << o3->getValueObj() << endl << o4->getValueObj();
-    
-    // object* o2 = new Integer(13);
-    // object* o3 = new Integer(9);
-    // object* o4 = new Integer(11);
-    // object* o5 = new Integer(17);
-
-    // bt->insert(bt, (Integer*)o1);
-    // bt->insert(bt, (Integer*)o2);
-    // bt->insert(bt, (Integer*)o3);
-    // bt->insert(bt, (Integer*)o4);
-    
-
+    string mode, insMode, delMode, sMode;
+    cin >> mode;
+    while (true) {
+        // вставка объекта
+        if (mode == "1") {
+            cout << "Write the inserting datatype: ";
+            cin >> insMode;
+            if (insMode == "Integer") {
+                cout << "Write int value: ";
+                object *i = new Integer; 
+                cin >> *(Integer*)i;
+                if (bt.add(i)) cout << "Integer object was inserted.\n";
+                else cout << "Error.\n";
+            }
+            else if (insMode == "Date") {
+                cout << "Write date in valid format [dd/MM/yyyy hh:mm:ss]: ";
+                object *d = new Date;
+                cin >> *(Date*)d;
+                if (bt.add(d)) cout << "Date object was inserted.\n";
+                else cout << "Error.\n";
+            }
+            else {
+                cout << "Invalid datatype, try again.\n";
+            }
+            cout << "Wrtite command's id: ";
+            cin >> mode;
+        }
+        // удаление объекта
+        if (mode == "2") {
+            cout << "Write the deleting datatype: ";
+            cin >> delMode;
+            if (delMode == "Integer") {int val;
+                cout << "Write int value: ";
+                object *i = new Integer; 
+                cin >> *(Integer*)i;
+                if (bt.deleteObj(i)) cout << "Integer object was deleted.\n";
+                else cout << "Error.\n";
+            }
+            else if (delMode == "Date") {int day, mon, year, h, m, s;
+                cout << "Write date in valid format [dd/MM/yyyy hh:mm:ss]: ";
+                object *d = new Date;
+                cin >> *(Date*)d;
+                if (bt.deleteObj(d)) cout << "Date object was deleted.\n";
+                else cout << "Error.\n";
+            }
+            else {
+                cout << "Invalid datatype, try again.\n";
+            }
+            cout << "Wrtite command's id: ";
+            cin >> mode;
+        }
+        // поиск объекта
+        if (mode == "3") {
+            cout << "Write the searching datatype: ";
+            cin >> sMode;
+            if (sMode == "Integer") {
+                cout << "Write int value: ";
+                object *i = new Integer; 
+                cin >> *(Integer*)i;
+                if (bt.search(i)) cout << "This element was found.\n";
+                else cout << "Can't find this element.\n";
+            }
+            else if (sMode == "Date") {
+                cout << "Write date in valid format [dd/MM/yyyy hh:mm:ss]: ";
+                object *d = new Date; 
+                cin >> *(Date*)d;
+                if (bt.search(d)) cout << "This element was found.\n";
+                else cout << "Can't find this element.\n";
+            }
+            else {
+                cout << "Invalid datatype, try again.\n";
+            }
+            cout << "Wrtite command's id: ";
+            cin >> mode;
+        }
+        // вывод структуры в консоль
+        if (mode == "4") {
+            bt.show();
+            cout << "Wrtite command's id: ";
+            cin >> mode;
+        }
+        // запись структуры в текстовый файл
+        if (mode == "5") {
+            ofstream fout("btree.txt");
+            bt.writeInTxt(fout);
+            cin >> mode;
+        }
+        // чтение структуры из текстовго файла
+        if (mode == "6") {
+            
+        }
+        // запись структуры в бинарный файл
+        if (mode == "7") {
+            
+        }
+        // чтение структуры из бинарного файла
+        if (mode == "8") {
+            
+        }
+        // удаление структуры
+        if (mode == "9") {
+            bt.~Btree();
+        }
+        // выход
+        if (mode == "10") {
+            exit(-1);
+        }
+        // список команд
+        if (mode == "0") {
+            cout << commands;
+            cin >> mode;
+        }
+    }
     
     return 0;
 }

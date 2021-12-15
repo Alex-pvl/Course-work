@@ -19,31 +19,31 @@ class Node {
             o = nullptr;
             left = nullptr;
             right = nullptr;
+            count = 0;
         }
         Node(object* obj) {
             o = obj;
             left = nullptr;
             right = nullptr;
+            count = 0;
+        }
+        ~Node() {
+            delete o;
+            if (left) delete left;
+            if (right) delete right;
         }
         friend class Btree;
     private:
         object *o;
         Node *left;
         Node *right;
+        int count;
     };
 
 class Btree {
 public:
     Btree() {
-        count = 0;
         root = nullptr;
-    }
-    // удаление узла
-    void deleteNotes(Node *n) {
-        if (!n) return;
-        delete n;
-        delete n->left;
-        delete n->right;
     }
     // геттер корня узла
     Node* getRoot() {
@@ -59,6 +59,9 @@ public:
     }
     object* getData(Node *n) {
         return n->o;
+    }
+    int getCount(Node *n) {
+        return n->count;
     }
     // добавление
     bool add(object *obj) {
@@ -79,9 +82,11 @@ public:
         }
         if (equal(elem->o, node->o) < 0) {
             node->left = insertNode(node->left, elem, ins);
+            node->count++;
         }
         else if (equal(elem->o, node->o) > 0) {
             node->right = insertNode(node->right, elem, ins);
+            node->count++;
         }
         else {
             inserted = false;
@@ -91,34 +96,35 @@ public:
         return node;
     }
     // поиск элемента в дереве
-    Node *search(object *obj) {
-        return searchNode(root, obj);
+    bool search(object *obj) {
+        bool find;
+        if (searchNode(root, obj) != nullptr) find = true;
+        else find = false;
+        return find;
     }
     // поиск узла
     Node *searchNode(Node *node, object *obj) {
+        if (node == nullptr) return nullptr;
         if (equal(node->o, obj) == 0) return node;
-        else {
-            if (equal(node->o, obj) < 0) {
-                searchNode(node->left, obj);
-            }
-            else {
-                searchNode(node->right, obj);
-            }
-        }
+        else if (equal(node->o, obj) < 0) searchNode(node->left, obj);
+        else searchNode(node->right, obj);
+        return node;
     }
     // вывод структуры
     void show() {
         showNode(root, 0);
     }
+    // вывод узла
     void showNode(Node *t, int level) {
         if (t == nullptr) {
             return;
         }
-        showNode(t->right, level + 1);
-        for (int i = 0; i < 3*level; i++) cout << " ";
-        cout << t->o->getId() << endl;
+        showNode(t->right, level+1);
+        for (int i = 0; i < 4*level; i++) cout << " ";
+        cout << t->o->getValueObj() << "(" << t->count << ")" << endl;
         showNode(t->left, level+1);
     }
+    // удаление объекта
     bool deleteObj(object* obj) {
         Node *n = new Node(obj);
         bool del;
@@ -147,35 +153,51 @@ public:
         }
         if (equal(elem->o, r->o) < 0) {
             r->left = deleteNodes(r->left, elem, del);
+            r->count--;
             deleted = del;
             return r;
         }
         else if (equal(elem->o, r->o) > 0) {
             r->right = deleteNodes(r->right, elem, del);
+            r->count--;
             deleted = del;
             return r;
         }
         deleted = true;
         if (r->left == nullptr && r->right == nullptr) {
+            r->count--;
             delete r;
             return nullptr;
         }
         if (r->left == nullptr) {
             Node *x = r->right;
+            r->count--;
             delete r;
             return x;
         }
         if (r->right == nullptr) {
             Node *x = r->left;
+            r->count--;
             delete r;
             return x;
         }
         r->right = Del(r->right, r);
     }
+    void writeInBinary(ofstream& fout) {
+        root->o->writeInBinary(fout);
+    }
+    void readFromBinary(ifstream& fin) {
+        root->o->readFromBinary(fin);
+    }
+    void writeInTxt(ofstream& fout) {
+        root->o->writeInBinary(fout);
+    }
+    void readFromTxt(ifstream& fin) {
+        root->o->readFromTxt(fin);
+    }
     ~Btree() {
-        
+        if (root) delete root;
     }
 private:
-    int count;
     Node *root;
 };

@@ -30,6 +30,7 @@ public:
     virtual void readFromTxt(ifstream&) {}
     // ввод объекта с клавиатуры 
     virtual void getObject() = 0;
+    // ключ для дерева
     virtual int getValueObj() = 0;
     ~object() {}    
 };
