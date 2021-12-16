@@ -121,14 +121,10 @@ object* Integer::makeCopy(object* o) {
 }
 
 void Integer::writeInBinary(ofstream& fout) {
-    int id = getId();
-    fout.write((char*)&id, sizeof(int));
     fout.write((char*)&value, sizeof(int));
 }
     
 void Integer::readFromBinary(ifstream& fin) {
-    int id;
-    fin.read((char*)&id, sizeof(int));
     fin.read((char*)&value, sizeof(int));
 }
 

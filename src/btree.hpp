@@ -240,7 +240,7 @@ public:
     }
     // деструктор
     ~Btree() {
-        free(this);
+        delete root;
     }
 private:
     Node *root;

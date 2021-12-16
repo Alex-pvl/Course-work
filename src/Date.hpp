@@ -499,8 +499,6 @@ object* Date::makeCopy(object* o) {
 }
 
 void Date::writeInBinary(ofstream& fout) {
-    int id = getId();
-    fout.write((char*)&id, sizeof(int));
     fout.write((char*)&day, sizeof(int));
     fout.write((char*)&mon, sizeof(int));
     fout.write((char*)&year, sizeof(int));
@@ -510,8 +508,6 @@ void Date::writeInBinary(ofstream& fout) {
 }
     
 void Date::readFromBinary(ifstream& fin) {
-    int id;
-    fin.read((char*)&id, sizeof(int));
     fin.read((char*)&day, sizeof(int));
     fin.read((char*)&mon, sizeof(int));
     fin.read((char*)&year, sizeof(int));
@@ -527,7 +523,6 @@ void Date::writeInTxt(ofstream& fout) {
 void Date::readFromTxt(ifstream& fin) {
     int day, mon, year, h, m, s, id;
     char date[10], time[8];
-    fin >> id;
     fin >> date;
     if (date[0] == 0) {
         day = date[1] - '0';

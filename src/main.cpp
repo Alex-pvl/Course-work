@@ -2,9 +2,7 @@
 #include "Date.hpp"
 #include "Integer.hpp"
 #include "btree.hpp"
-#include <cstring>
 using namespace std;
-
 
 int main() {
     string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n   [31]-search Integer\n   [32]-search Date\n[4]-show\n[5]-write to txt file\n[6]-write to binary file\n[7]-read from txt file\n[8]-read from binary file\n[9]-exit\n\n[0]-help\n\nWrite command's id: ";
