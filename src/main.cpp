@@ -7,7 +7,7 @@ using namespace std;
 
 
 int main() {
-    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n\t[11]-new Integer\n\t[12]-new Date\n[2]-delete object\n\t[21]-delete Integer\n\t[22]-delete Date\n[3]-search\n\t[31]-search Integer\n\t[32]-search Date\n[4]-show\n[5]-write to txt file\n[6]-write to binary file\n[7]-read from txt file\n[8]-read from binary file\n[9]-delete Binary Tree\n[10]-exit\n\n[0]-help\n\n\nWrite command's id: ";
+    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n   [31]-search Integer\n   [32]-search Date\n[4]-show\n[5]-write to txt file\n[6]-write to binary file\n[7]-read from txt file\n[8]-read from binary file\n[9]-exit\n\n[0]-help\n\nWrite command's id: ";
     cout << commands;
     Btree bt;
     string mode, insMode, delMode, sMode;
@@ -111,12 +111,8 @@ int main() {
         if (mode == "8") {
             
         }
-        // удаление структуры
-        if (mode == "9") {
-            bt.~Btree();
-        }
         // выход
-        if (mode == "10") {
+        if (mode == "9") {
             exit(-1);
         }
         // список команд
