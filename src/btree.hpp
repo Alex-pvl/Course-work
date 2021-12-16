@@ -58,12 +58,6 @@ public:
     Node* getRight(Node* n) {  
         return n->right;
     }
-    object* getData(Node *n) {
-        return n->o;
-    }
-    int getCount(Node *n) {
-        return n->count;
-    }
     // добавление
     bool add(object *obj) {
         Node *n = new Node(obj);
@@ -121,9 +115,16 @@ public:
             return;
         }
         showNode(t->right, level+1);
-        for (int i = 0; i < 4*level; i++) cout << " ";
+        for (int i = 0; i < 3*level; i++) cout << " ";
         cout << t->o->getValueObj() << "(" << t->count << ")" << endl;
         showNode(t->left, level+1);
+    }
+    Node* minValueObj(Node* n) {
+        Node *cur = n;
+        while (cur && cur->left != nullptr) {
+            cur = cur->left;
+        }
+        return cur;
     }
     // удаление объекта
     bool deleteObj(object* obj) {
@@ -135,16 +136,16 @@ public:
         root = deleteNodes(root, n, del);
         return del;
     }
-    Node* Del(Node *t, Node *t0) {
-        if (t->left != nullptr) {
-            t->left = Del(t->left, t0);
-            return t;
-        }
-        t0->o = t->o;
-        Node *x = t->right;
-        delete t;
-        return x;
-    }
+    // Node* Del(Node *t, Node *t0) {
+    //     if (t->left != nullptr) {
+    //         t->left = Del(t->left, t0);
+    //         return t;
+    //     }
+    //     t0->o = t->o;
+    //     Node *x = t->right;
+    //     delete t;
+    //     return x;
+    // }
     // удаление узла
     Node* deleteNodes(Node *r, Node *elem, bool &deleted) {
         bool del;
@@ -156,59 +157,90 @@ public:
             r->left = deleteNodes(r->left, elem, del);
             r->count--;
             deleted = del;
-            return r;
         }
         else if (equal(elem->o, r->o) > 0) {
             r->right = deleteNodes(r->right, elem, del);
             r->count--;
             deleted = del;
-            return r;
         }
-        deleted = true;
-        if (r->left == nullptr && r->right == nullptr) {
+        else {
+            deleted = true;
+            if (r->left == nullptr && r->right == nullptr) {
+                return nullptr;
+            }
+            else if (r->left == nullptr) {
+                Node *x = r->right;
+                r->count--;
+                free(r);
+                return x;
+            }
+            else if (r->right == nullptr) {
+                Node *x = r->left;
+                r->count--;
+                free(r);
+                return x;
+            }
+            Node *tmp = minValueObj(r->right);
+            r->o = tmp->o;
             r->count--;
-            delete r;
-            return nullptr;
+            r->right = deleteNodes(r->right, tmp, del);
         }
-        if (r->left == nullptr) {
-            Node *x = r->right;
-            r->count--;
-            delete r;
-            return x;
-        }
-        if (r->right == nullptr) {
-            Node *x = r->left;
-            r->count--;
-            delete r;
-            return x;
-        }
-        r->right = Del(r->right, r);
+        return r;
     }
-    void writeInBinary(Node *t, int level) {
-        
+    // запись структуры в бинарный файл для пользователя
+    void wrBin() {
+        ofstream fout("BinaryTree.dat", ofstream::binary);
+        if (!fout.is_open()) cout << "Cannot open file.";
+        else {
+            cout << "Binary Tree was written in the binary file.\n";
+            writeInBinary(fout, root, 0);
+        }
     }
+    // запись структуры в бинарный файл
+    void writeInBinary(ofstream &fout, Node *t, int level) {
+        char s = ' ';
+        if (t == nullptr) return;
+        writeInBinary(fout, t->right, level+1);
+        for (int i = 0; i < 3*level; i++) fout.write((char*)&s, sizeof(char));
+        t->o->writeInBinary(fout);
+        writeInBinary(fout, t->left, level+1);
+    }
+    // чтение структуры из бинарного файла для пользоователя
+    void rBin() {
+
+    }
+    // чтение структуры из бинарного файла 
     void readFromBinary(ifstream& fin) {
         
     }
+    // запись структуры в текстовый файл для пользователя
     void wrTxt() {
         ofstream fout("BinaryTree.txt");
         if (!fout.is_open()) cout << "Cannot open file.";
         else {
+            cout << "Binary Tree was written in the txt file.\n";
             writeInTxt(fout, root, 0);
-        } 
+        }
     }
+    // запись структуры в текстовый файл 
     void writeInTxt(ofstream &fout, Node *t, int level) {
         if (t == nullptr) return;
         writeInTxt(fout, t->right, level+1);
-        for (int i = 0; i < 4*level; i++) fout << " ";
+        for (int i = 0; i < 3*level; i++) fout << " ";
         t->o->writeInTxt(fout);
         writeInTxt(fout, t->left, level+1);
     }
+    // чтение структуры из текстового файла для пользователя
+    void rTxt() {
+
+    }
+    // чтение структуры из текстового файла
     void readFromTxt(ifstream& fin) {
         
     }
+    // деструктор
     ~Btree() {
-        if (root) delete root;
+        free(this);
     }
 private:
     Node *root;
