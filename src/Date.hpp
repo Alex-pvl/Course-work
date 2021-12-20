@@ -84,27 +84,43 @@ private:
 };
 
 Date::Date() {
-    this->day = 1;
-    this->mon = 1;
-    this->year = 1;
-    this->h = 0;
-    this->m = 0;
-    this->s = 0;
+    this->setDay(1);
+    this->setMonth(1);
+    this->setYear(1);
+    this->setHour(0);
+    this->setMinute(0);
+    this->setSecond(0);
 }
 
 Date::Date(int day, int mon, int year) {
-    this->day = day;
-    this->mon = mon;
-    this->year = year;
-    this->h = 0;
-    this->m = 0;
-    this->s = 0;
+    try {
+        if (day > 31 || day < 0 || mon > 12 || mon < 0 || year < 0) throw runtime_error("Invalid Date Format.");
+        this->setDay(day);
+        this->setMonth(mon);
+        this->setYear(year);
+        this->setHour(0);
+        this->setMinute(0);
+        this->setSecond(0);
+    } catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
 
-Date::Date(int day, int mon, int year, int h, int m, int s) : Date::Date(day, mon, year) {
-    this->h = h;
-    this->m = m;
-    this->s = s;
+Date::Date(int day, int mon, int year, int h, int m, int s) {
+    try {
+        if (day > 31 || day < 0 || mon > 12 || mon < 0 || year < 0 || 
+        h > 23 || h < 0 || m > 59 || m < 0 || s > 59 || s < 0) throw runtime_error("Invalid Date Format.");
+        this->setDay(day);
+        this->setMonth(mon);
+        this->setYear(year);
+        this->setHour(h);
+        this->setMinute(m);
+        this->setSecond(s);
+    } catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
 
 int Date::getDay() { 
@@ -572,23 +588,45 @@ void Date::getObject() {
 }
 
 Date& Date::operator=(const Date& d) {
-    day = d.day;
-    mon = d.mon;
-    year = d.year;
-    h = d.h;
-    m = d.m;
-    s = d.s;
+    try {
+        if (day > 31 || day < 0 || mon > 12 || mon < 0 || year < 0 || 
+        h > 23 || h < 0 || m > 59 || m < 0 || s > 59 || s < 0) throw runtime_error("Invalid Date Format.");
+        this->setDay(d.day);
+        this->setMonth(d.mon);
+        this->setYear(d.year);
+        this->setHour(d.h);
+        this->setMinute(d.m);
+        this->setSecond(d.s);
+    } catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
     return *this;
 }
 
 ostream& operator<<(ostream& os, Date& d) {
-    os << ((Date*)&d)->getValueObj();
+    os << ((Date*)&d)->uploadInString();
     return os;
 }
 
 istream& operator>>(istream& is, Date& d) {
-    is >> ((Date*)&d)->day >> ((Date*)&d)->mon >> ((Date*)&d)->year >> 
-    ((Date*)&d)->h >> ((Date*)&d)->m >> ((Date*)&d)->s; 
+    int day, mon, year, h, m, s;
+    is >> day >> mon >> year >> h >> m >> s;
+    try
+    {
+        if (day > 31 || day < 0 || mon > 12 || mon < 0 || year < 0 || 
+        h > 23 || h < 0 || m > 59 || m < 0 || s > 59 || s < 0) throw runtime_error("Invalid Date Format.");
+        d.setDay(day);
+        d.setMonth(mon);
+        d.setYear(year);
+        d.setHour(h);
+        d.setMinute(m);
+        d.setSecond(s);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
     return is;
 }
 

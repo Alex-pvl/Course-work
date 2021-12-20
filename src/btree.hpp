@@ -65,6 +65,8 @@ public:
         if (!n) {
             return false;
         }
+        if (((Date*)obj)->getDay() == 1 && ((Date*)obj)->getMonth() == 1 && ((Date*)obj)->getYear() == 1 && 
+        ((Date*)obj)->getHour() == 0 && ((Date*)obj)->getMinute() == 0 && ((Date*)obj)->getSecond() == 0) return false;
         root = insertNode(root, n, ins);
         return ins;
     }
@@ -77,16 +79,15 @@ public:
         }
         if (equal(elem->o, node->o) < 0) {
             node->left = insertNode(node->left, elem, ins);
-            node->count++;
         }
         else if (equal(elem->o, node->o) > 0) {
             node->right = insertNode(node->right, elem, ins);
-            node->count++;
         }
         else {
             inserted = false;
             return node;
         }
+        if (ins) node->count++;
         inserted = ins;
         return node;
     }
@@ -116,7 +117,7 @@ public:
         }
         showNode(t->right, level+1);
         for (int i = 0; i < 3*level; i++) cout << " ";
-        cout << t->o->getValueObj() << "(" << t->count << ")" << endl;
+        cout << t->o->getValueObj() << "(" << t->o->uploadInString() << ")" << endl;
         showNode(t->left, level+1);
     }
     Node* minValueObj(Node* n) {
@@ -136,16 +137,6 @@ public:
         root = deleteNodes(root, n, del);
         return del;
     }
-    // Node* Del(Node *t, Node *t0) {
-    //     if (t->left != nullptr) {
-    //         t->left = Del(t->left, t0);
-    //         return t;
-    //     }
-    //     t0->o = t->o;
-    //     Node *x = t->right;
-    //     delete t;
-    //     return x;
-    // }
     // удаление узла
     Node* deleteNodes(Node *r, Node *elem, bool &deleted) {
         bool del;
@@ -198,12 +189,11 @@ public:
     }
     // запись структуры в бинарный файл
     void writeInBinary(ofstream &fout, Node *t, int level) {
-        char s = ' ';
         if (t == nullptr) return;
-        writeInBinary(fout, t->right, level+1);
-        for (int i = 0; i < 3*level; i++) fout.write((char*)&s, sizeof(char));
+        fout.write((char*)&t, sizeof(Node));
         t->o->writeInBinary(fout);
         writeInBinary(fout, t->left, level+1);
+        writeInBinary(fout, t->right, level+1);
     }
     // чтение структуры из бинарного файла для пользоователя
     void rBin() {
@@ -211,31 +201,6 @@ public:
     }
     // чтение структуры из бинарного файла 
     void readFromBinary(ifstream& fin) {
-        
-    }
-    // запись структуры в текстовый файл для пользователя
-    void wrTxt() {
-        ofstream fout("BinaryTree.txt");
-        if (!fout.is_open()) cout << "Cannot open file.";
-        else {
-            cout << "Binary Tree was written in the txt file.\n";
-            writeInTxt(fout, root, 0);
-        }
-    }
-    // запись структуры в текстовый файл 
-    void writeInTxt(ofstream &fout, Node *t, int level) {
-        if (t == nullptr) return;
-        writeInTxt(fout, t->right, level+1);
-        for (int i = 0; i < 3*level; i++) fout << " ";
-        t->o->writeInTxt(fout);
-        writeInTxt(fout, t->left, level+1);
-    }
-    // чтение структуры из текстового файла для пользователя
-    void rTxt() {
-
-    }
-    // чтение структуры из текстового файла
-    void readFromTxt(ifstream& fin) {
         
     }
     // деструктор

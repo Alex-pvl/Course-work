@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n   [31]-search Integer\n   [32]-search Date\n[4]-show\n[5]-write to txt file\n[6]-write to binary file\n[7]-read from txt file\n[8]-read from binary file\n[9]-exit\n\n[0]-help\n\nWrite command's id: ";
+    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n   [31]-search Integer\n   [32]-search Date\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-exit\n\n[0]-help\n\nWrite command's id: ";
     cout << commands;
     Btree bt;
     string mode, insMode, delMode, sMode;
@@ -89,33 +89,28 @@ int main() {
             cout << "Write command's id: ";
             cin >> mode;
         }
-        // запись структуры в текстовый файл
-        if (mode == "5") {
-            bt.wrTxt();
-            cout << "Write command's id: ";
-            cin >> mode;
-        }
-        // чтение структуры из текстовго файла
-        if (mode == "6") {
-            
-        }
         // запись структуры в бинарный файл
-        if (mode == "7") {
+        if (mode == "5") {
             bt.wrBin();
             cout << "Write command's id: ";
             cin >> mode;
         }
         // чтение структуры из бинарного файла
-        if (mode == "8") {
+        if (mode == "6") {
             
         }
         // выход
-        if (mode == "9") {
+        if (mode == "7") {
             exit(-1);
         }
         // список команд
         if (mode == "0") {
             cout << commands;
+            cin >> mode;
+        }
+        if (mode != "0" && mode != "1" && mode != "2" && mode != "3" && mode != "4" && 
+        mode != "5" && mode != "6" && mode != "7") {
+            cout << "Unknown command. Try again.\nWrite command's id: ";
             cin >> mode;
         }
     }

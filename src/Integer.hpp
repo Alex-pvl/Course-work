@@ -170,7 +170,7 @@ Integer operator-(const Integer& first, const Integer& second) {
 }
 
 ostream& operator<<(ostream& os, Integer& i) {
-    os << ((Integer*)&i)->getValueObj();
+    os << ((Integer*)&i)->uploadInString();
     return os;
 }
 
