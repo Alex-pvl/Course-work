@@ -24,10 +24,6 @@ public:
     virtual void writeInBinary(ofstream&) {}
     // чтение объекта из бинарного файла
     virtual void readFromBinary(ifstream&) {}
-    // запись объекта в текстовый файл
-    virtual void writeInTxt(ofstream&) {}
-    // чтение объекта из текстового файла
-    virtual void readFromTxt(ifstream&) {}
     // ввод объекта с клавиатуры 
     virtual void getObject() = 0;
     // ключ для дерева

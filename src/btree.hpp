@@ -48,18 +48,6 @@ public:
     Btree() {
         root = nullptr;
     }
-    // геттер корня узла
-    Node* getRoot() {
-        return root;
-    }
-    // геттер левого лепестка
-    Node* getLeft(Node* n) {
-        return n->left;
-    }
-    // геттер правого лепестка
-    Node* getRight(Node* n) {  
-        return n->right;
-    }
     // добавление
     bool add(object *obj) {
         Node *n = new Node(obj);

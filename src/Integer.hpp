@@ -42,10 +42,6 @@ public:
     void writeInBinary(ofstream&);
     // чтение объекта из бинарного файла
     void readFromBinary(ifstream&);
-    // запись объекта в текстовый файл
-    void writeInTxt(ofstream&);
-    // чтение объекта из текстового файла
-    void readFromTxt(ifstream&);
     // ввод числа с клавиатуры
     void getObject();
     int getValueObj();
@@ -126,16 +122,6 @@ void Integer::writeInBinary(ofstream& fout) {
     
 void Integer::readFromBinary(ifstream& fin) {
     fin.read((char*)&value, sizeof(int));
-}
-
-void Integer::writeInTxt(ofstream& fout) {
-    fout << value << endl;
-}
-
-void Integer::readFromTxt(ifstream& fin) {
-    int id, n;
-    fin >> id >> n;
-    this->setValue(n);
 }
 
 void Integer::getObject() {

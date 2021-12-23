@@ -8,72 +8,60 @@ using namespace std;
 
 class Date : public object {
 public:
-    Date();
-    Date(int, int, int);
-    Date(int, int, int, int, int, int);
+Date();
+Date(int, int, int);
+Date(int, int, int, int, int, int);
+int getDay();
+int getMonth();
+int getYear();
+int getHour();
+int getMinute();
+int getSecond();
+int getValue();
+void setYear(int);
+void setMonth(int);
+void setDay(int);
+void setHour(int);
+void setMinute(int);
+void setSecond(int);
+void incYear();
+void incMonth();
+void incDay();
+void incHour();
+void incMinutes();
+void incSecond();
+void decYear();
+void decMonth();
+void decDay();
+void decHour();
+void decMinute();
+void decSecond();
+// перевод строки в дату
+object* loadFromString(char*);
+// перевод даты в строку
+string uploadInString();
+// получение имени класса
+string getName();
+// получение идентификатора класса
+int getId();
+// сравнение двух объектов
+int equals(object*);
+// сумма объектов
+object* unionObj(object*, object*);
+// создание копии объекта
+object* makeCopy(object*);
+// запись объекта в бинарный файл
+void writeInBinary(ofstream&);
+// чтение объекта из бинарного файла
+void readFromBinary(ifstream&);
+// ввод числа с клавиатуры
+void getObject();
+int getValueObj();
 
-    int getDay();
-    int getMonth();
-    int getYear();
-    int getHour();
-    int getMinute();
-    int getSecond();
-
-    int getValue();
-
-    void setYear(int);
-    void setMonth(int);
-    void setDay(int);
-    void setHour(int);
-    void setMinute(int);
-    void setSecond(int);
-
-    void incYear();
-    void incMonth();
-    void incDay();
-    void incHour();
-    void incMinutes();
-    void incSecond();
-
-    void decYear();
-    void decMonth();
-    void decDay();
-    void decHour();
-    void decMinute();
-    void decSecond();
-
-    // перевод строки в дату
-    object* loadFromString(char*);
-    // перевод даты в строку
-    string uploadInString();
-    // получение имени класса
-    string getName();
-    // получение идентификатора класса
-    int getId();
-    // сравнение двух объектов
-    int equals(object*);
-    // сумма объектов
-    object* unionObj(object*, object*);
-    // создание копии объекта
-    object* makeCopy(object*);
-    // запись объекта в бинарный файл
-    void writeInBinary(ofstream&);
-    // чтение объекта из бинарного файла
-    void readFromBinary(ifstream&);
-    // запись объекта в текстовый файл
-    void writeInTxt(ofstream&);
-    // чтение объекта из текстового файла
-    void readFromTxt(ifstream&);
-    // ввод числа с клавиатуры
-    void getObject();
-    int getValueObj();
-    
-    Date& operator=(const Date& d);
-
-    friend ostream& operator<<(ostream&, Date&);
-    friend istream& operator>>(istream&, Date&);
-
-    ~Date();
+Date& operator=(const Date& d);
+friend ostream& operator<<(ostream&, Date&);
+friend istream& operator>>(istream&, Date&);
+~Date();
 private:
     int day;
     int mon;
@@ -530,57 +518,6 @@ void Date::readFromBinary(ifstream& fin) {
     fin.read((char*)&h, sizeof(int));
     fin.read((char*)&m, sizeof(int));
     fin.read((char*)&s, sizeof(int));
-}
-
-void Date::writeInTxt(ofstream& fout) {
-    fout << year << endl;
-}
-
-void Date::readFromTxt(ifstream& fin) {
-    int day, mon, year, h, m, s, id;
-    char date[10], time[8];
-    fin >> date;
-    if (date[0] == 0) {
-        day = date[1] - '0';
-    } else {
-        day = 10 * (date[0]-'0') + date[1] - '0';
-    }
-    if (date[3] == 0) {
-        mon = date[4] - '0';
-    } else {
-        mon = 10 * (date[3] - '0') + date[4] - '0';
-    }
-    if (date[6] == 0) {
-        if (date[7] == 0) {
-            if (date[8] == 0) {
-                year = date[9] - '0';
-            } else {
-                year = 10 * (date[8] - '0') + date[9] - '0';
-            }
-        } else {
-            year = 100 * (date[7] - '0') + 10 * (date[8] - '0') + date[9] - '0';
-        }
-    } else {
-        year = 1000 * (date[6] - '0') + 100 * (date[7] - '0') + 10 * (date[8] - '0') + date[9] - '0';
-    }
-    this->setDay(day); this->setMonth(mon); this->setYear(year);
-    fin >> time;
-    if (time[0] == 0) {
-        h = time[1] - '0';
-    } else {
-        h = 10 * (time[0] - '0') + time[1] - '0';
-    }
-    if (time[3] == 0) {
-        m = time[4] - '0';
-    } else {
-        m = 10 * (time[3] - '0') + time[4] - '0';
-    }
-    if (time[6] == 0) {
-        s = time[7] - '0';
-    } else {
-        s = 10 * (time[6] - '0') + time[7] - '0';
-    }
-    this->setHour(h); this->setMinute(m); this->setSecond(s);
 }
 
 void Date::getObject() {
