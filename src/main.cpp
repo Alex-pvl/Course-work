@@ -97,7 +97,11 @@ int main() {
         }
         // чтение структуры из бинарного файла
         if (mode == "6") {
-            
+            Btree nBt;
+            nBt.rBin();
+            nBt.show();
+            cout << "Write command's id: ";
+            cin >> mode;
         }
         // выход
         if (mode == "7") {

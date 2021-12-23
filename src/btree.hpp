@@ -180,28 +180,56 @@ public:
     }
     // запись структуры в бинарный файл для пользователя
     void wrBin() {
-        ofstream fout("BinaryTree.dat", ofstream::binary);
+        ofstream fout("BinaryTree.dat", ios::binary);
         if (!fout.is_open()) cout << "Cannot open file.";
         else {
             cout << "Binary Tree was written in the binary file.\n";
-            writeInBinary(fout, root, 0);
+            writeInBinary(fout, root);
         }
     }
     // запись структуры в бинарный файл
-    void writeInBinary(ofstream &fout, Node *t, int level) {
+    /*
+    root -> int/date -> key + data -> long(left) -> long(right) -> ...
+    */
+    void writeInBinary(ofstream &fout, Node *t) {
         if (t == nullptr) return;
-        fout.write((char*)&t, sizeof(Node));
+        int key = t->o->getId();
+        fout.write((char*)&key, sizeof(int));
         t->o->writeInBinary(fout);
-        writeInBinary(fout, t->left, level+1);
-        writeInBinary(fout, t->right, level+1);
+        writeInBinary(fout, t->left);
+        writeInBinary(fout, t->right);
     }
     // чтение структуры из бинарного файла для пользоователя
     void rBin() {
-
+        ifstream fin("BinaryTree.dat", ios::binary);
+        if (!fin.is_open()) cout <<  "Cannot open file.";
+        else {
+            readFromB(fin);
+        }
     }
     // чтение структуры из бинарного файла 
-    void readFromBinary(ifstream& fin) {
-        
+    void readFromB(ifstream& fin) {
+        // int key = t->o->getValueObj();
+        // fin.read((char*)&key, sizeof(int));
+        // while (!fin.eof())
+        // {
+        //     if (t == nullptr) return;
+        //     t->o->readFromBinary(fin);
+        //     readFromB(fin, t->left);
+        //     readFromB(fin, t->right);
+        // }
+        while (!fin.eof()) {
+            int key;
+            object *obj;
+            fin.read((char*)&key, sizeof(int));
+            if (key == 1) {
+                obj = new Integer;
+            } else if (key == 2) {
+                obj = new Date;
+            }
+            obj->readFromBinary(fin);
+            add(obj);
+        }
     }
     // деструктор
     ~Btree() {
