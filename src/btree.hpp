@@ -94,17 +94,10 @@ public:
         return node;
     }
     // поиск элемента в дереве
-    // bool search(int k) {
-    //     bool find;
-    //     if () {
-    //         find = true;
-    //     } 
-    //     else find = false;
-    //     return find;
-    // }
     void search(int k) {
         object *res = searchNode(root, k);
-        if (res != nullptr) cout << res->getValueObj() << "(" << res->uploadInString() << ")\n"; 
+        if (res != nullptr) cout << "Object was found - " << res->getValueObj() << "(" << res->uploadInString() << ")\n";
+        else cout << "Cannot find this data.\n"; 
     }
     // поиск узла
     object *searchNode(Node *node, int k) {
