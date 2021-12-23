@@ -60,24 +60,27 @@ int main() {
         // поиск объекта
         if (mode == 3) {
             cout << "Write the searching datatype\n([31] - Integer, [32] - Date): ";
-            cin >> sMode;
-            if (sMode == 31) {
-                cout << "Write int value: ";
-                object *i = new Integer; 
-                cin >> *(Integer*)i;
-                if (bt->search(i)) cout << "This element was found.\n";
-                else cout << "Can't find this element.\n";
-            }
-            else if (sMode == 32) {
-                cout << "Write date in valid format [dd/MM/yyyy hh:mm:ss]: ";
-                object *d = new Date; 
-                cin >> *(Date*)d;
-                if (bt->search(d)) cout << "This element was found.\n";
-                else cout << "Can't find this element.\n";
-            }
-            else {
-                cout << "Invalid datatype, try again.\n";
-            }
+            // cin >> sMode;
+            // if (sMode == 31) {
+            //     cout << "Write int value: ";
+            //     object *i = new Integer; 
+            //     cin >> *(Integer*)i;
+            //     if (bt->search(i)) cout << "This element was found.\n";
+            //     else cout << "Can't find this element.\n";
+            // }
+            // else if (sMode == 32) {
+            //     cout << "Write date in valid format [dd/MM/yyyy hh:mm:ss]: ";
+            //     object *d = new Date; 
+            //     cin >> *(Date*)d;
+            //     if (bt->search(d)) cout << "This element was found.\n";
+            //     else cout << "Can't find this element.\n";
+            // }
+            // else {
+            //     cout << "Invalid datatype, try again.\n";
+            // }
+            int k;
+            cin >> k;
+            bt->search(k);
             cout << "Write command's id: ";
         }
         // вывод структуры в консоль

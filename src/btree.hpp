@@ -24,6 +24,7 @@ class Node {
         }
         Node(object* obj) {
             o = obj;
+            key = obj->getValueObj();
             left = nullptr;
             right = nullptr;
             count = 0;
@@ -35,6 +36,7 @@ class Node {
         }
         friend class Btree;
     private:
+        int key;
         object *o;
         Node *left;
         Node *right;
@@ -92,22 +94,27 @@ public:
         return node;
     }
     // поиск элемента в дереве
-    bool search(object *obj) {
-        bool find;
-        if (searchNode(root, obj) != nullptr) {
-            find = true;
-            cout << obj->getValueObj() << "(" << obj->uploadInString() << ")\n";
-        } 
-        else find = false;
-        return find;
+    // bool search(int k) {
+    //     bool find;
+    //     if () {
+    //         find = true;
+    //     } 
+    //     else find = false;
+    //     return find;
+    // }
+    void search(int k) {
+        object *res = searchNode(root, k);
+        if (res != nullptr) cout << res->getValueObj() << "(" << res->uploadInString() << ")\n"; 
     }
     // поиск узла
-    Node *searchNode(Node *node, object *obj) {
+    object *searchNode(Node *node, int k) {
         if (node == nullptr) return nullptr;
-        if (equal(node->o, obj) == 0) return node;
-        else if (equal(node->o, obj) < 0) searchNode(node->left, obj);
-        else searchNode(node->right, obj);
-        return node;
+        if (k == node->key) return node->o;
+        if (k < node->key) {
+            return searchNode(node->left, k);
+        } else {
+            return searchNode(node->right, k);
+        }
     }
     // вывод структуры
     void show() {
