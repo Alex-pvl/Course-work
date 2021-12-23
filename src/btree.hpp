@@ -94,7 +94,10 @@ public:
     // поиск элемента в дереве
     bool search(object *obj) {
         bool find;
-        if (searchNode(root, obj) != nullptr) find = true;
+        if (searchNode(root, obj) != nullptr) {
+            find = true;
+            cout << obj->getValueObj() << "(" << obj->uploadInString() << ")\n";
+        } 
         else find = false;
         return find;
     }
@@ -188,9 +191,6 @@ public:
         }
     }
     // запись структуры в бинарный файл
-    /*
-    root -> int/date -> key + data -> long(left) -> long(right) -> ...
-    */
     void writeInBinary(ofstream &fout, Node *t) {
         if (t == nullptr) return;
         int key = t->o->getId();
@@ -204,21 +204,13 @@ public:
         ifstream fin("BinaryTree.dat", ios::binary);
         if (!fin.is_open()) cout <<  "Cannot open file.";
         else {
+            cout << "Binary Tree was read from the binary file.\n";
             readFromB(fin);
         }
     }
     // чтение структуры из бинарного файла 
     void readFromB(ifstream& fin) {
-        // int key = t->o->getValueObj();
-        // fin.read((char*)&key, sizeof(int));
-        // while (!fin.eof())
-        // {
-        //     if (t == nullptr) return;
-        //     t->o->readFromBinary(fin);
-        //     readFromB(fin, t->left);
-        //     readFromB(fin, t->right);
-        // }
-        while (!fin.eof()) {
+        while (true) {
             int key;
             object *obj;
             fin.read((char*)&key, sizeof(int));
@@ -229,6 +221,7 @@ public:
             }
             obj->readFromBinary(fin);
             add(obj);
+            if (fin.peek() == EOF) break;
         }
     }
     // деструктор
