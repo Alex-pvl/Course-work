@@ -63,6 +63,7 @@ int main() {
             int k;
             cin >> k;
             bt->search(k);
+            //cout << bt->search2(k) << endl;
             cout << "Write command's id: ";
         }
         // вывод структуры в консоль
@@ -86,11 +87,14 @@ int main() {
             cout << "Exiting...";
             exit(-1);
         }
+        if (mode == 8) {
+            cout << bt->size();
+        }
         // список команд
         if (mode == 0) {
             cout << commands;
         }
-        if (mode > 7 || mode < 0) {
+        if (mode > 8 || mode < 0) {
             cout << "Unknown command. Try again.\nWrite command's id: ";
         }
         cin >> mode;

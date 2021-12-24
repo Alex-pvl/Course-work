@@ -47,6 +47,10 @@ class Btree {
 public:
     Btree() {
         root = nullptr;
+        c = 0;
+    }
+    int size() {
+        return root->count + 1;
     }
     // добавление
     bool add(object *obj) {
@@ -81,19 +85,27 @@ public:
         inserted = ins;
         return node;
     }
+    int search2(int k) {
+        object *res = searchNode(root, k);
+        if (res != nullptr) return c;
+        return -1;
+    }
     // поиск элемента в дереве
     void search(int k) {
         object *res = searchNode(root, k);
         if (res != nullptr) cout << "Object was found - " << res->getValueObj() << "(" << res->uploadInString() << ")\n";
         else cout << "Cannot find this data.\n"; 
+        c = 0;
     }
     // поиск узла
     object *searchNode(Node *node, int k) {
         if (node == nullptr) return nullptr;
         if (k == node->key) return node->o;
         if (k < node->key) {
+            c++;
             return searchNode(node->left, k);
         } else {
+            c++;
             return searchNode(node->right, k);
         }
     }
@@ -107,7 +119,7 @@ public:
             return;
         }
         showNode(t->right, level+1);
-        for (int i = 0; i < 3*level; i++) cout << " ";
+        for (int i = 0; i < level; i++) cout << "\t";
         cout << t->o->getValueObj() << "(" << t->o->uploadInString() << ")" << endl;
         showNode(t->left, level+1);
     }
@@ -137,12 +149,12 @@ public:
         }
         if (equal(elem->o, r->o) < 0) {
             r->left = deleteNodes(r->left, elem, del);
-            r->count--;
+            //r->count--;
             deleted = del;
         }
         else if (equal(elem->o, r->o) > 0) {
             r->right = deleteNodes(r->right, elem, del);
-            r->count--;
+            //r->count--;
             deleted = del;
         }
         else {
@@ -152,21 +164,22 @@ public:
             }
             else if (r->left == nullptr) {
                 Node *x = r->right;
-                r->count--;
-                free(r);
+                //r->count--;
+                delete r;
                 return x;
             }
             else if (r->right == nullptr) {
                 Node *x = r->left;
-                r->count--;
-                free(r);
+                //r->count--;
+                delete r;
                 return x;
             }
             Node *tmp = minValueObj(r->right);
             r->o = tmp->o;
-            r->count--;
+            //r->count--;
             r->right = deleteNodes(r->right, tmp, del);
         }
+        if (del) r->count--;
         return r;
     }
     // запись структуры в бинарный файл для пользователя
@@ -218,4 +231,5 @@ public:
     }
 private:
     Node *root;
+    int c;
 };
