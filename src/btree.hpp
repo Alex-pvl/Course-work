@@ -29,11 +29,6 @@ class Node {
             right = nullptr;
             count = 0;
         }
-        ~Node() {
-            delete o;
-            if (left) delete left;
-            if (right) delete right;
-        }
         friend class Btree;
     private:
         int key;
@@ -117,12 +112,73 @@ public:
     void showNode(Node *t, int level) {
         if (t == nullptr) {
             return;
-        }
+        } 
         showNode(t->right, level+1);
         for (int i = 0; i < level; i++) cout << "\t";
         cout << t->o->getValueObj() << "(" << t->o->uploadInString() << ")" << endl;
         showNode(t->left, level+1);
     }
+    // Node* minValueObj(Node* n) {
+    //     Node *cur = n;
+    //     while (cur && cur->left != nullptr) {
+    //         cur = cur->left;
+    //     }
+    //     return cur;
+    // }
+    // // удаление объекта
+    // bool deleteObj(int k) {
+    //     bool del;
+    //     root = deleteNodes(root, k, del);
+    //     return del;
+    // }
+    // Node* Del(Node* t, Node* t0) {
+    //     if (t->left != nullptr) {
+    //         t->left = Del(t->left, t0);
+    //         return t;
+    //     }
+    //     t0->key = t->key;
+    //     t0->o = t->o;
+    //     Node* x = t->right;
+    //     delete t;
+    //     return x;
+    // }
+    // // удаление узла
+    // Node* deleteNodes(Node *r, int k, bool &deleted) {
+    //     bool del;
+    //     if (r == nullptr) {
+    //         deleted = false;
+    //         return r;
+    //     }
+    //     if (k < r->key) {
+    //         r->left = deleteNodes(r->left, k, del);
+    //         //r->count--;
+    //         deleted = del;
+    //     }
+    //     if (k > r->key) {
+    //         r->right = deleteNodes(r->right, k, del);
+    //         //r->count--;
+    //         deleted = del;
+    //     }
+    //     deleted = true;
+    //     if (r->left == nullptr && r->right == nullptr) {
+    //         delete r;
+    //         return nullptr;
+    //     }
+    //     if (r->left == nullptr) {
+    //         Node* x = r->right;
+    //         delete r;
+    //         return x;
+    //     }
+    //     if (r->right == nullptr) {
+    //         Node* x = r->left;
+    //         delete r;
+    //         return x;
+    //     }
+    //     r->right = Del(r->right, r);
+    //     if (del) r->count--;
+    //     return r;
+    // }
+
     Node* minValueObj(Node* n) {
         Node *cur = n;
         while (cur && cur->left != nullptr) {
@@ -182,6 +238,52 @@ public:
         if (del) r->count--;
         return r;
     }
+
+    // void del(int k) {
+    //     root = deleteNode(root, k);
+    // }
+    // Node* findMax(Node* r) {
+    //     if (r == nullptr) return nullptr;
+    //     while (r->right != nullptr) {
+    //         r = r->right;
+    //     }
+    //     return r;
+    // }
+    // Node* deleteNode(Node* r, int k) {
+    //     if (r == nullptr) return r;
+    //     if (r->key > k) {
+    //         r->left = deleteNode(r->left, k);
+    //         return r;
+    //     }
+    //     else if (r->key < k) {
+    //         r->right = deleteNode(r->right, k);
+    //         return r;
+    //     }
+    //     if (r->left == nullptr) {
+    //         Node* tmp = r->right;
+    //         delete r;
+    //         return tmp;
+    //     }
+    //     else if (r->right == nullptr) {
+    //         Node* tmp = r->left;
+    //         delete r;
+    //         return tmp;
+    //     }
+    //     else {
+    //         Node* succParent = r;
+    //         Node* succ = r->right;
+    //         while (succ->left != nullptr) {
+    //             succParent = succ;
+    //             succ = succ->left;
+    //         }
+    //         if (succParent != r) succParent->left = succ->right;
+    //         else succParent->right = succ->right;
+    //         r->key = succ->key;
+    //         r->o = succ->o;
+    //         delete succ;
+    //         return r;
+    //     }
+    // }
     // запись структуры в бинарный файл для пользователя
     void wrBin() {
         ofstream fout("BinaryTree.dat", ios::binary);

@@ -88,7 +88,8 @@ int main() {
             exit(-1);
         }
         if (mode == 8) {
-            cout << bt->size();
+            cout << "Binary tree size - " << bt->size() << endl;
+            cout << "Write command's id: ";
         }
         // список команд
         if (mode == 0) {
