@@ -474,22 +474,28 @@ int Date::equals(object* o1, object* o2) {
 }
 
 object* Date::unionObj(object* o1, object* o2) {
-    for (int i = 0; i < ((Date*)o1)->s + ((Date*)o2)->s; i++) {
+    int sec = ((Date*)o1)->getSecond() + ((Date*)o2)->getSecond();
+    for (int i = 0; i < sec; i++) {
         this->incSecond();
     }
-    for (int i = 0; i < ((Date*)o1)->m + ((Date*)o2)->m; i++) {
+    int min = ((Date*)o1)->getMinute() + ((Date*)o2)->getMinute();
+    for (int i = 0; i < min; i++) {
         this->incMinutes();
     }
-    for (int i = 0; i < ((Date*)o1)->h + ((Date*)o2)->h; i++) {
+    int hours = ((Date*)o1)->getHour() + ((Date*)o2)->getHour();
+    for (int i = 0; i < hours; i++) {
         this->incHour();
     }
-    for (int i = 0; i < ((Date*)o1)->year + ((Date*)o2)->year - 1; i++) {
+    int years = ((Date*)o1)->getYear() + ((Date*)o2)->getYear() - 1;
+    for (int i = 0; i < years; i++) {
         this->incYear();
     }
-    for (int i = 0; i < ((Date*)o1)->mon + ((Date*)o2)->mon - 1; i++) {
+    int months = ((Date*)o1)->getMonth() + ((Date*)o2)->getMonth() - 1;
+    for (int i = 0; i < months; i++) {
         this->incMonth();
     }
-    for (int i = 0; i < ((Date*)o1)->day + ((Date*)o2)->day - 1; i++) {
+    int days = ((Date*)o1)->getDay() + ((Date*)o2)->getDay() - 1;
+    for (int i = 0; i < days; i++) {
         this->incDay();
     }
     return this;

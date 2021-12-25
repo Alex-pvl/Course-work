@@ -9,6 +9,7 @@ int main() {
     cout << commands;
     Btree *bt = new Btree;
     int mode, insMode, delMode;
+    int objMode;
     cin >> mode;
     while (true) {
         // вставка объекта
@@ -49,7 +50,6 @@ int main() {
                 cout << "Write date in valid format [dd/MM/yyyy hh:mm:ss]: ";
                 object *d = new Date;
                 cin >> *(Date*)d;
-                cout << d->uploadInString() << endl;
                 if (bt->deleteObj(d)) cout << "Date object was deleted.\n";
                 else cout << "Error.\n";
             }
@@ -63,7 +63,93 @@ int main() {
             cout << "Write the searching data: ";
             int k;
             cin >> k;
-            bt->search(k);
+            object* res = bt->search(k);
+            if (res != nullptr) {
+                cout << "Object was found.\n";
+                int id = res->getId();
+                cout << "Write the obj mode\n\t[31]-get class Name\n\t[32]-upload in string\n\t[33]-make copy\n\t[34]-union\n\t[35]-compare\n\t[-1]-return to binary tree\n";
+                cin >> objMode;
+                while (true) {
+                    if (objMode == -1) {
+                        break;
+                    }
+                    if (objMode == 31) {
+                        cout << "Class name - ";
+                        if (id == 1) cout << ((Integer*)res)->getName() << endl;
+                        else if (id == 2) cout << ((Date*)res)->getName() << endl;
+                        cout << "Write obj mode: ";
+                        cin >> objMode;
+                    }
+                    if (objMode == 32) {
+                        string str = res->uploadInString();
+                        cout << "String - " << str << endl;
+                        cout << "Write obj mode: ";
+                        cin >> objMode;
+                    }
+                    if (objMode == 33) {
+                        cout << "Making a copy - ";
+                        object* res2;
+                        if (id == 1) {
+                            res2 = new Integer;
+                        } 
+                        else if (id == 2) {
+                            res2 = new Date;
+                        }
+                        res2->makeCopy(res);
+                        cout << res2->uploadInString() << endl;
+                        cout << "Write obj mode: ";
+                        cin >> objMode;
+                    }
+                    if (objMode == 34) {
+                        cout << "Write the same class object: ";
+                        object* sum;
+                        if (id == 1) {
+                            sum = new Integer;
+                            cin >> *(Integer*)sum;
+                            cout << "Union is - ";
+                            object* re = new Integer;
+                            re->unionObj(sum, res);
+                            cout << re->uploadInString() << endl;
+                        } 
+                        else if (id == 2) {
+                            sum = new Date;
+                            cin >> *(Date*)sum;
+                            cout << "Union is - ";
+                            object* re = new Date;
+                            re->unionObj(sum, res);
+                            cout << re->uploadInString() << endl;
+                        }
+                        cout << "Write obj mode: ";
+                        cin >> objMode;
+                    }
+                    if (objMode == 35) {
+                        cout << "Write the same class object: ";
+                        object* r;
+                        if (id == 1) {
+                            r = new Integer;
+                            cin >> *(Integer*)r;
+                        } 
+                        else if (id == 2) {
+                            r = new Date;
+                            cin >> *(Date*)r;
+                        }
+                        int cmp = res->equals(res, r);
+                        if (cmp > 0) cout << res->uploadInString() << " > " << r->uploadInString() << endl;
+                        else if (cmp < 0) cout << res->uploadInString() << " < " << r->uploadInString() << endl;
+                        else cout << res->uploadInString() << " == " << r->uploadInString() << endl;
+                        cout << "Write obj mode: ";
+                        cin >> objMode;
+                    }
+                    if ((objMode > 35 || objMode < 31) && objMode != -1) {
+                        cout << "Unknown command. Try again.\nWrite obj mode: ";
+                        cin >> objMode;
+                    }
+                    
+                }
+            }
+            else cout << "Cannot find this data.\n"; 
+            
+            
             //cout << bt->search2(k) << endl;
             cout << "Write command's id: ";
         }

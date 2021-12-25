@@ -27,6 +27,7 @@ class Node {
     public:
         Node() {
             o = nullptr;
+            key = 0;
             left = nullptr;
             right = nullptr;
             count = 0;
@@ -34,13 +35,6 @@ class Node {
         Node(object* obj) {
             o = obj;
             key = obj->getValueObj();
-            left = nullptr;
-            right = nullptr;
-            count = 0;
-        }
-        Node(int val) {
-            o = nullptr;
-            key = val;
             left = nullptr;
             right = nullptr;
             count = 0;
@@ -107,10 +101,10 @@ public:
         return -1;
     }
     // поиск элемента в дереве
-    void search(int k) {
+    object* search(int k) {
         object *res = searchNode(root, k);
-        if (res != nullptr) cout << "Object was found - " << res->getValueObj() << "(" << res->uploadInString() << ")\n";
-        else cout << "Cannot find this data.\n"; 
+        if (res != nullptr) return res;
+        else return nullptr;
     }
     // поиск узла
     object *searchNode(Node *node, int k) {
@@ -138,65 +132,7 @@ public:
         cout  << t->o->getValueObj() << "(" << t->o->uploadInString() << ")[" << t->count << "]" << endl;
         showNode(t->left, level+1);
     }
-    // Node* minValueObj(Node* n) {
-    //     Node *cur = n;
-    //     while (cur && cur->left != nullptr) {
-    //         cur = cur->left;
-    //     }
-    //     return cur;
-    // }
-    // // удаление объекта
-    // bool deleteObj(object* obj) {
-    //     Node *n = new Node(obj);
-    //     bool del;
-    //     if (!n) {
-    //         return false;
-    //     }
-    //     root = deleteNodes(root, n, del);
-    //     return del;
-    // }
-    // // удаление узла
-    // Node* deleteNodes(Node *r, Node *elem, bool &deleted) {
-    //     bool del;
-    //     if (r == nullptr) {
-    //         deleted = false;
-    //         return r;
-    //     }
-    //     if (equal(elem->o, r->o) < 0) {
-    //         r->left = deleteNodes(r->left, elem, del);
-    //         deleted = del;
-    //     }
-    //     else if (equal(elem->o, r->o) > 0) {
-    //         r->right = deleteNodes(r->right, elem, del);
-    //         deleted = del;
-    //     }
-        
-    //     else { 
-    //         deleted = true;
-    //         if (r->left == nullptr && r->right == nullptr) {
-    //             r->count--;
-    //             return nullptr;
-    //         }
-    //         else if (r->left == nullptr) {
-    //             r->count--;
-    //             Node *x = r->right;
-    //             delete r;
-    //             return x;
-    //         }
-    //         else if (r->right == nullptr) {
-    //             r->count--;
-    //             Node *x = r->left;
-    //             delete r;
-    //             return x;
-    //         }
-            
-    //         Node *tmp = minValueObj(r->right);
-    //         r->o = tmp->o;
-    //         r->right = deleteNodes(r->right, tmp, del);
-    //     }
-    //     //if (del) r->count--;
-    //     return r;
-    // }
+    // удаление элемента для пользователя
     bool deleteObj(object* obj) {
         Node *n = new Node(obj);
         bool del;
@@ -212,7 +148,7 @@ public:
             return t;
         }
         t0->o = t->o;
-        
+        t0->key = t->key;
         Node *x = t->right;
         delete t;
         return x;
@@ -224,9 +160,7 @@ public:
             deleted = false;
             return r;
         } 
-        
         if (equal(elem->o, r->o) < 0) {
-            
             r->left = deleteNodes(r->left, elem, del);
             r->count--;
             deleted = del;
@@ -240,27 +174,22 @@ public:
         }
         deleted = true;
         if (r->left == nullptr && r->right == nullptr) {
-            
             delete r;
             return nullptr;
         }
         else if (r->left == nullptr) {
-            
             Node *x = r->right;
-            
+            r->right->count--;
             delete r;
             return x;
         }
         else if (r->right == nullptr) {
-           
             Node *x = r->left;
-            
+            r->left->count--;
             delete r;
             return x;
         }
-        
         r->right = Del(r->right, r);
-        
         return r;
     }
     // запись структуры в бинарный файл для пользователя
@@ -274,7 +203,9 @@ public:
     }
     // запись структуры в бинарный файл
     void writeInBinary(ofstream &fout, Node *t) {
-        if (t == nullptr) return;
+        if (t == nullptr) {
+            return;
+        }
         int key = t->o->getId();
         fout.write((char*)&key, sizeof(int));
         t->o->writeInBinary(fout);
