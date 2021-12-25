@@ -8,7 +8,7 @@ int main() {
     string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-exit\n[8]-size of binary tree\n[0]-help\n\nWrite command's id: ";
     cout << commands;
     Btree *bt = new Btree;
-    int mode, insMode, delMode, sMode;
+    int mode, insMode, delMode;
     cin >> mode;
     while (true) {
         // вставка объекта
@@ -88,6 +88,7 @@ int main() {
             cout << "Exiting...";
             exit(-1);
         }
+        // размер дерева
         if (mode == 8) {
             cout << "Binary tree size - " << bt->size() << endl;
             cout << "Write command's id: ";
