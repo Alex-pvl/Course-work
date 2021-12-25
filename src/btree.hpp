@@ -7,9 +7,18 @@
 using namespace std;
 
 int equal(object* o1, object* o2) {
-    if (o1->getValueObj() < o2->getValueObj()) return -1;
-    else if (o1->getValueObj() > o2->getValueObj()) return 1;
-    else return 0;
+    if ((o1->getId() == 1 && o2->getId() == 2) || (o1->getId() == 2 && o2->getId() == 1)) {
+        if (o1->getValueObj() < o2->getValueObj()) return -1;
+        else if (o1->getValueObj() > o2->getValueObj()) return 1;
+        else return 0;
+    }
+    else if (o1->getId() == 1 && o2->getId() == 1) {
+        return (((Integer*)o1)->equals((Integer*)o1, (Integer*)o2));
+    }
+    else if (o1->getId() == 2 && o2->getId() == 2) {
+        return (((Date*)o1)->equals((Date*)o1, (Date*)o2));
+    }
+    return 0;
 }
 
 class Btree;
@@ -45,7 +54,8 @@ public:
         c = 0;
     }
     int size() {
-        return root->count + 1;
+        if (root != nullptr) return root->count + 1;
+        return 0;
     }
     // добавление
     bool add(object *obj) {

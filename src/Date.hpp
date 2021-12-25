@@ -45,7 +45,7 @@ string getName();
 // получение идентификатора класса
 int getId();
 // сравнение двух объектов
-int equals(object*);
+int equals(object*, object*);
 // сумма объектов
 object* unionObj(object*, object*);
 // создание копии объекта
@@ -424,50 +424,53 @@ int Date::getId() {
     return 2;
 }
 
-int Date::equals(object* o) {
+int Date::equals(object* o1, object* o2) {
     int first_d = 0, first_s = 0, second_d = 0, second_s = 0;
 
-    for (int i = 1; i < this->getYear(); i++) {
+    for (int i = 1; i < ((Date*)o1)->getYear(); i++) {
         if (i % 4 == 0 || ((i % 100 != 0) && (i % 400 == 0))) {
             first_d += 366;
         } else first_d += 365;
     }
-    for (int i = 1; i < this->getMonth(); i++) {
+    for (int i = 1; i < ((Date*)o1)->getMonth(); i++) {
         if (i == 4 || i == 6 || i == 9 || i == 11) {
             first_d += 30;
         } else if (i == 2) {
-            if (this->getYear() % 4 == 0 || ((this->getYear() % 100 != 0) && (this->getYear() % 400 == 0))) {
+            if (((Date*)o1)->getYear() % 4 == 0 || ((((Date*)o1)->getYear() % 100 != 0) && (((Date*)o1)->getYear() % 400 == 0))) {
                 first_d += 29;
-            } else first_d += 28;
+            } else second_d += 28;
         } else first_d += 31;
     }
-    first_d += this->getDay();
+    first_d += ((Date*)o1)->getDay();
 
-    first_s += 3600 * (this->getHour() + 60 * this->getMinute() + this->getSecond());
+    first_s += 3600 * ((Date*)o1)->getHour() + 60 * ((Date*)o1)->getMinute() + ((Date*)o1)->getSecond();
 
-    for (int i = 1; i < ((Date*)o)->getYear(); i++) {
+    for (int i = 1; i < ((Date*)o2)->getYear(); i++) {
         if (i % 4 == 0 || ((i % 100 != 0) && (i % 400 == 0))) {
             second_d += 366;
         } else second_d += 365;
     }
-    for (int i = 1; i < ((Date*)o)->getMonth(); i++) {
+    for (int i = 1; i < ((Date*)o2)->getMonth(); i++) {
         if (i == 4 || i == 6 || i == 9 || i == 11) {
             second_d += 30;
         } else if (i == 2) {
-            if (((Date*)o)->getYear() % 4 == 0 || ((((Date*)o)->getYear() % 100 != 0) && (((Date*)o)->getYear() % 400 == 0))) {
+            if (((Date*)o2)->getYear() % 4 == 0 || ((((Date*)o2)->getYear() % 100 != 0) && (((Date*)o2)->getYear() % 400 == 0))) {
                 second_d += 29;
             } else second_d += 28;
         } else second_d += 31;
     }
-    second_d += ((Date*)o)->getDay();
+    second_d += ((Date*)o2)->getDay();
 
-    second_s += 3600 * ((Date*)o)->getHour() + 60 * ((Date*)o)->getMinute() + ((Date*)o)->getSecond();
+    second_s += 3600 * ((Date*)o2)->getHour() + 60 * ((Date*)o2)->getMinute() + ((Date*)o2)->getSecond();
 
+    
     if (first_d > second_d) return 1;
-    else if ((first_d == second_d) && (first_s > second_s)) return 1;
-    else if ((first_d == second_d) && (first_s < second_s)) return -1;
     else if (first_d < second_d) return -1;
-    else return 0;
+    else {
+        if (first_s > second_s) return 1;
+        else if (first_s < second_s) return -1;
+        else return 0;
+    }
 }
 
 object* Date::unionObj(object* o1, object* o2) {

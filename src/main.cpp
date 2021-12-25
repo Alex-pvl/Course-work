@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-exit\n\n[0]-help\n\nWrite command's id: ";
+    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-exit\n[8]-size of binary tree\n[0]-help\n\nWrite command's id: ";
     cout << commands;
     Btree *bt = new Btree;
     int mode, insMode, delMode, sMode;
@@ -49,6 +49,7 @@ int main() {
                 cout << "Write date in valid format [dd/MM/yyyy hh:mm:ss]: ";
                 object *d = new Date;
                 cin >> *(Date*)d;
+                cout << d->uploadInString() << endl;
                 if (bt->deleteObj(d)) cout << "Date object was deleted.\n";
                 else cout << "Error.\n";
             }

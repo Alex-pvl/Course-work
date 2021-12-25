@@ -33,7 +33,7 @@ public:
     // получение идентификатора класса
     int getId();
     // сравнение двух объектов
-    int equals(object*);
+    int equals(object*, object*);
     // сумма объектов
     object* unionObj(object*, object*);
     // создание копии объекта
@@ -98,8 +98,8 @@ int Integer::getId() {
     return 1;
 }
 
-int Integer::equals(object* o) {
-    int i1 = this->value, i2 = ((Integer*)o)->value;
+int Integer::equals(object* o1, object* o2) {
+    int i1 = ((Integer*)o1)->value, i2 = ((Integer*)o2)->value;
     if (i1 > i2) return 1;
     else if (i1 < i2) return -1;
     else return 0;

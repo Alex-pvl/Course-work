@@ -15,7 +15,7 @@ public:
     // получение идентификатора класса
     virtual int getId() = 0;
     // сравнение двух объектов
-    virtual int equals(object*) = 0;
+    virtual int equals(object*, object*) = 0;
     // сумма объектов
     virtual object* unionObj(object*, object*) = 0;
     // создание копии объекта
