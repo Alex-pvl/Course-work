@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-exit\n[8]-size of binary tree\n[0]-help\n\nWrite command's id: ";
+    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n\n[3]-search\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-exit\n[8]-size of binary tree\n[0]-help\n\nWrite command's id: ";
     cout << commands;
     Btree *bt = new Btree;
     int mode, insMode, delMode;
@@ -37,25 +37,10 @@ int main() {
         }
         // удаление объекта
         if (mode == 2) {
-            cout << "Write the deleting datatype\n([21] - Integer, [22] - Date): ";
-            cin >> delMode;
-            if (delMode == 21) {
-                cout << "Write int value: ";
-                object *i = new Integer; 
-                cin >> *(Integer*)i;
-                if (bt->deleteObj(i)) cout << "Integer object was deleted.\n";
-                else cout << "Error.\n";
-            }
-            else if (delMode == 22) {
-                cout << "Write date in valid format [dd/MM/yyyy hh:mm:ss]: ";
-                object *d = new Date;
-                cin >> *(Date*)d;
-                if (bt->deleteObj(d)) cout << "Date object was deleted.\n";
-                else cout << "Error.\n";
-            }
-            else {
-                cout << "Invalid datatype, try again.\n";
-            }
+            object* dell = new Integer;
+            cout << "Write the deleting key value: ";
+            dell->getObject();
+            bt->deleteObj(dell);
             cout << "Write command's id: ";
         }
         // поиск объекта
@@ -67,7 +52,8 @@ int main() {
             if (res != nullptr) {
                 cout << "Object was found.\n";
                 int id = res->getId();
-                cout << "Write the obj mode\n\t[31]-get class Name\n\t[32]-upload in string\n\t[33]-make copy\n\t[34]-union\n\t[35]-compare\n\t[-1]-return to binary tree\n";
+                cout << "Available commands\n\t[31]-get class Name\n\t[32]-upload in string\n\t[33]-make copy\n\t[34]-union\n\t[35]-compare\n\t[-1]-return to binary tree\n";
+                cout << "Write obj mode: ";
                 cin >> objMode;
                 while (true) {
                     if (objMode == -1) {

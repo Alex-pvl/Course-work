@@ -12,13 +12,7 @@ int equal(object* o1, object* o2) {
         else if (o1->getValueObj() > o2->getValueObj()) return 1;
         else return 0;
     }
-    else if (o1->getId() == 1 && o2->getId() == 1) {
-        return (((Integer*)o1)->equals((Integer*)o1, (Integer*)o2));
-    }
-    else if (o1->getId() == 2 && o2->getId() == 2) {
-        return (((Date*)o1)->equals((Date*)o1, (Date*)o2));
-    }
-    return 0;
+    else return o1->equals(o1,o2);
 }
 
 class Btree;
@@ -136,10 +130,9 @@ public:
     bool deleteObj(object* obj) {
         Node *n = new Node(obj);
         bool del;
-        if (!n) {
-            return false;
-        }
         root = deleteNodes(root, n, del);
+        if (del) cout << "Object was deleted.\n";
+        else cout << "Error.\n";
         return del;
     }
     Node* Del(Node *t, Node *t0) {
@@ -147,8 +140,9 @@ public:
             t->left = Del(t->left, t0);
             return t;
         }
-        t0->o = t->o;
         t0->key = t->key;
+        t0->o = t->o;
+        
         Node *x = t->right;
         delete t;
         return x;
@@ -162,34 +156,39 @@ public:
         } 
         if (equal(elem->o, r->o) < 0) {
             r->left = deleteNodes(r->left, elem, del);
-            r->count--;
+            
             deleted = del;
+            if (deleted) r->count--;
             return r;
         }
-        else if (equal(elem->o, r->o) > 0) {
+        if (equal(elem->o, r->o) > 0) {
             r->right = deleteNodes(r->right, elem, del);
-            r->count--;
+            
             deleted = del;
+            if (deleted) r->count--;
             return r;
         }
         deleted = true;
+        
         if (r->left == nullptr && r->right == nullptr) {
             delete r;
             return nullptr;
         }
-        else if (r->left == nullptr) {
+        if (r->left == nullptr) {
             Node *x = r->right;
-            r->right->count--;
+            x->count--;
             delete r;
             return x;
         }
-        else if (r->right == nullptr) {
+        if (r->right == nullptr) {
             Node *x = r->left;
-            r->left->count--;
+            x->count--;
             delete r;
             return x;
         }
+        
         r->right = Del(r->right, r);
+        if (deleted) r->count--;
         return r;
     }
     // запись структуры в бинарный файл для пользователя
