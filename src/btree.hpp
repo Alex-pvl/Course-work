@@ -127,70 +127,122 @@ public:
         showNode(t->left, level+1);
     }
     // удаление элемента для пользователя
-    bool deleteObj(object* obj) {
-        Node *n = new Node(obj);
-        bool del;
-        root = deleteNodes(root, n, del);
-        if (del) cout << "Object was deleted.\n";
-        else cout << "Error.\n";
-        return del;
-    }
-    Node* Del(Node *t, Node *t0) {
-        if (t->left != nullptr) {
-            t->left = Del(t->left, t0);
-            return t;
-        }
-        t0->key = t->key;
-        t0->o = t->o;
+    // bool deleteObj(object* obj) {
+    //     Node *n = new Node(obj);
+    //     bool del;
+    //     root = deleteNodes(root, n, del);
+    //     if (del) cout << "Object was deleted.\n";
+    //     else cout << "Error.\n";
+    //     return del;
+    // }
+    // Node* Del(Node *t, Node *t0) {
+    //     if (t->left != nullptr) {
+    //         t->left = Del(t->left, t0);
+    //         return t;
+    //     }
+    //     t0->key = t->key;
+    //     t0->o = t->o;
         
-        Node *x = t->right;
-        delete t;
-        return x;
-    }
-    // удаление узла
-    Node* deleteNodes(Node *r, Node *elem, bool &deleted) {
-        bool del;
-        if (r == nullptr) {
-            deleted = false;
-            return r;
-        } 
-        if (equal(elem->o, r->o) < 0) {
-            r->left = deleteNodes(r->left, elem, del);
+    //     Node *x = t->right;
+    //     delete t;
+    //     return x;
+    // }
+    // // удаление узла
+    // Node* deleteNodes(Node *r, Node *elem, bool &deleted) {
+    //     bool del;
+    //     if (r == nullptr) {
+    //         deleted = false;
+    //         return r;
+    //     } 
+    //     if (equal(elem->o, r->o) < 0) {
+    //         r->left = deleteNodes(r->left, elem, del);
             
-            deleted = del;
-            if (deleted) r->count--;
-            return r;
-        }
-        if (equal(elem->o, r->o) > 0) {
-            r->right = deleteNodes(r->right, elem, del);
+    //         deleted = del;
+    //         //if (deleted) r->count--;
+    //         return r;
+    //     }
+    //     if (equal(elem->o, r->o) > 0) {
+    //         r->right = deleteNodes(r->right, elem, del);
             
-            deleted = del;
-            if (deleted) r->count--;
-            return r;
-        }
-        deleted = true;
+    //         deleted = del;
+    //         //if (deleted) r->count--;
+    //         return r;
+    //     }
+    //     deleted = true;
+    //     if (del) r->count--;
+    //     if (r->left == nullptr && r->right == nullptr) {
+    //         delete r;
+    //         return nullptr;
+    //     }
+    //     if (r->left == nullptr) {
+    //         Node *x = r->right;
+    //         x->count--;
+    //         delete r;
+    //         return x;
+    //     }
+    //     if (r->right == nullptr) {
+    //         Node *x = r->left;
+    //         x->count--;
+    //         delete r;
+    //         return x;
+    //     }
         
-        if (r->left == nullptr && r->right == nullptr) {
-            delete r;
-            return nullptr;
-        }
-        if (r->left == nullptr) {
-            Node *x = r->right;
-            x->count--;
-            delete r;
-            return x;
-        }
-        if (r->right == nullptr) {
-            Node *x = r->left;
-            x->count--;
-            delete r;
-            return x;
-        }
+    //     r->right = Del(r->right, r);
         
-        r->right = Del(r->right, r);
-        if (deleted) r->count--;
+    //     return r;
+    // }
+    void del(object* obj) {
+        root = deleteNode(root, obj);
+    }
+    Node* FindMin(Node* r) {
+        while (r->left != nullptr) r = r->left;
         return r;
     }
+    Node* deleteNode(Node* r, object* obj) {
+        if (r == nullptr) return r;
+        else if (equal(obj, r->o) < 0) {
+            r->count--;
+            r->left = deleteNode(r->left, obj);
+        } 
+        else if (equal(obj, r->o) > 0) {
+            r->count--;
+            r->right = deleteNode(r->right, obj); 
+        } 
+
+        else {
+            //r->count--;
+            if (r->left == nullptr && r->right == nullptr) {
+                
+                delete r;
+                r = nullptr;
+            }
+
+            else if(r->left == nullptr) {
+                r->count--;
+                Node* tmp = r;
+                r = r->right;
+                
+                delete tmp;
+            }
+            else if(r->right == nullptr) {
+                r->count--;
+                Node* tmp = r;
+                r = r->left;
+               
+                delete tmp;
+            }
+
+            else {
+                Node* tmp = FindMin(r->right);
+                r->count--;
+                r->o = tmp->o;
+                r->key = tmp->key;
+                
+                r->right = deleteNode(r->right, tmp->o);
+            }
+        }
+        return r;
+    } 
     // запись структуры в бинарный файл для пользователя
     void wrBin() {
         ofstream fout("BinaryTree.dat", ios::binary);

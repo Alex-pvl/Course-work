@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n\n[3]-search\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-exit\n[8]-size of binary tree\n[0]-help\n\nWrite command's id: ";
+    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-exit\n[8]-size of binary tree\n[0]-help\n\nWrite command's id: ";
     cout << commands;
     Btree *bt = new Btree;
     int mode, insMode, delMode;
@@ -37,10 +37,23 @@ int main() {
         }
         // удаление объекта
         if (mode == 2) {
-            object* dell = new Integer;
-            cout << "Write the deleting key value: ";
+            int s0 = bt->size();
+            object* dell;
+            cout << "Write deleting mode([21]-delete Integer,[22]-delete Date): ";
+            cin >> delMode;
+            if (delMode == 21) {
+                cout << "Write int value: ";
+                dell = new Integer;
+            }
+            else if (delMode == 22) {
+                cout << "Write date in valid format [dd/MM/yyyy hh:mm:ss]: ";
+                dell = new Date;
+            }
             dell->getObject();
-            bt->deleteObj(dell);
+            bt->del(dell);
+            int s1 = bt->size();
+            if (s1 < s0) cout << "Object was deleted.\n";
+            else cout << "Error\n";
             cout << "Write command's id: ";
         }
         // поиск объекта
@@ -52,7 +65,7 @@ int main() {
             if (res != nullptr) {
                 cout << "Object was found.\n";
                 int id = res->getId();
-                cout << "Available commands\n\t[31]-get class Name\n\t[32]-upload in string\n\t[33]-make copy\n\t[34]-union\n\t[35]-compare\n\t[-1]-return to binary tree\n";
+                cout << "Available commands\n\t[31]-get class Name\n\t[32]-upload in string\n\t[33]-make copy\n\t[34]-union\n\t[35]-compare\n\t[36]-delete from binary tree\n\t[-1]-return to binary tree\n";
                 cout << "Write obj mode: ";
                 cin >> objMode;
                 while (true) {
@@ -126,7 +139,17 @@ int main() {
                         cout << "Write obj mode: ";
                         cin >> objMode;
                     }
-                    if ((objMode > 35 || objMode < 31) && objMode != -1) {
+                    if (objMode == 36) {
+                        int s0 = bt->size();
+                        cout << "deleting...\n";
+                        bt->del(res);
+                        int s1 = bt->size();
+                        if (s1 < s0) cout << "Object was deleted.\n";
+                        else cout << "Error\n";
+                        cout << "Write obj mode: ";
+                        cin >> objMode;
+                    }
+                    if ((objMode > 36 || objMode < 31) && objMode != -1) {
                         cout << "Unknown command. Try again.\nWrite obj mode: ";
                         cin >> objMode;
                     }
