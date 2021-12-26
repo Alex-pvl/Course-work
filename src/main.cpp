@@ -5,7 +5,8 @@
 using namespace std;
 
 int main() {
-    string commands = "Binary Tree was created.\nAvailable commands:\n[1]-insert new object\n   [11]-new Integer\n   [12]-new Date\n[2]-delete object\n   [21]-delete Integer\n   [22]-delete Date\n[3]-search\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-exit\n[8]-size of binary tree\n[0]-help\n\nWrite command's id: ";
+    cout << "Binary Tree was created.\n";
+    string commands = "Available commands:\n[1]-insert new object\n\t[11]-new Integer\n\t[12]-new Date\n[2]-delete object\n\t[21]-delete Integer\n\t[22]-delete Date\n[3]-search\n\t[31]-get class Name\n\t[32]-upload in string\n\t[33]-make copy\n\t[34]-union\n\t[35]-compare\n\t[36]-delete from binary tree\n\t[-1]-return to binary tree\n[4]-show\n[5]-write to binary file\n[6]-read from binary file\n[7]-size of binary tree\n[8]-exit\n[0]-help\n\nWrite command's id: ";
     cout << commands;
     Btree *bt = new Btree;
     int mode, insMode, delMode;
@@ -37,7 +38,7 @@ int main() {
         }
         // удаление объекта
         if (mode == 2) {
-            int s0 = bt->size();
+            
             object* dell;
             cout << "Write deleting mode([21]-delete Integer,[22]-delete Date): ";
             cin >> delMode;
@@ -50,10 +51,15 @@ int main() {
                 dell = new Date;
             }
             dell->getObject();
-            bt->del(dell);
-            int s1 = bt->size();
-            if (s1 < s0) cout << "Object was deleted.\n";
-            else cout << "Error\n";
+            if (bt->search(dell->getValueObj()) != nullptr) {
+                if (bt->search(dell->getValueObj())->getId() == dell->getId() && (equal(bt->search(dell->getValueObj()), dell) == 0)) {
+                    bt->del(dell);
+                    cout << "Object was deleted.\n";
+                }
+                else cout << "Error\n"; 
+            }
+            else cout << "Error\n"; 
+            
             cout << "Write command's id: ";
         }
         // поиск объекта
@@ -65,13 +71,16 @@ int main() {
             if (res != nullptr) {
                 cout << "Object was found.\n";
                 int id = res->getId();
-                cout << "Available commands\n\t[31]-get class Name\n\t[32]-upload in string\n\t[33]-make copy\n\t[34]-union\n\t[35]-compare\n\t[36]-delete from binary tree\n\t[-1]-return to binary tree\n";
+                string objCommands = "Available commands\n\t[31]-get class Name\n\t[32]-upload in string\n\t[33]-make copy\n\t[34]-union\n\t[35]-compare\n\t[36]-delete from binary tree\n\t[-1]-return to binary tree\n";
+                cout << objCommands;
                 cout << "Write obj mode: ";
                 cin >> objMode;
                 while (true) {
+                    // выход к командам дерева
                     if (objMode == -1) {
                         break;
                     }
+                    // вывод названия класса
                     if (objMode == 31) {
                         cout << "Class name - ";
                         if (id == 1) cout << ((Integer*)res)->getName() << endl;
@@ -79,6 +88,7 @@ int main() {
                         cout << "Write obj mode: ";
                         cin >> objMode;
                     }
+                    // строковое представление
                     if (objMode == 32) {
                         string str = res->uploadInString();
                         cout << "String - " << str << endl;
@@ -95,12 +105,12 @@ int main() {
                             res2 = new Date;
                         }
                         res2->makeCopy(res);
-                        cout << res2->uploadInString() << endl;
+                        cout << "Copy - " << res2->uploadInString() << endl;
                         cout << "Write obj mode: ";
                         cin >> objMode;
                     }
                     if (objMode == 34) {
-                        cout << "Write the same class object: ";
+                        cout << "Write the same class object for union: ";
                         object* sum;
                         if (id == 1) {
                             sum = new Integer;
@@ -122,7 +132,7 @@ int main() {
                         cin >> objMode;
                     }
                     if (objMode == 35) {
-                        cout << "Write the same class object: ";
+                        cout << "Write the same class object for comparing: ";
                         object* r;
                         if (id == 1) {
                             r = new Integer;
@@ -140,12 +150,9 @@ int main() {
                         cin >> objMode;
                     }
                     if (objMode == 36) {
-                        int s0 = bt->size();
                         cout << "deleting...\n";
                         bt->del(res);
-                        int s1 = bt->size();
-                        if (s1 < s0) cout << "Object was deleted.\n";
-                        else cout << "Error\n";
+                        cout << "Object was deleted.\n";
                         cout << "Write obj mode: ";
                         cin >> objMode;
                     }
@@ -157,9 +164,6 @@ int main() {
                 }
             }
             else cout << "Cannot find this data.\n"; 
-            
-            
-            //cout << bt->search2(k) << endl;
             cout << "Write command's id: ";
         }
         // вывод структуры в консоль
@@ -178,15 +182,15 @@ int main() {
             bt->rBin();
             cout << "Write command's id: ";
         }
-        // выход
-        if (mode == 7) {
-            cout << "Exiting...";
-            exit(-1);
-        }
         // размер дерева
-        if (mode == 8) {
+        if (mode == 7) {
             cout << "Binary tree size - " << bt->size() << endl;
             cout << "Write command's id: ";
+        }
+        // выход
+        if (mode == 8) {
+            cout << "Exiting...";
+            exit(-1);
         }
         // список команд
         if (mode == 0) {
@@ -197,6 +201,5 @@ int main() {
         }
         cin >> mode;
     }
-    
     return 0;
 }

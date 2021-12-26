@@ -5,10 +5,12 @@
 
 void test_rand(int n) {
     Btree bt;
-    int* m = new int[n];
-    srand(0);
-    int random;
+    // массив значений
+    int* m = new int[n]; 
+    srand(clock());
+    int random, pog10 = n + n%10;
     for (int i = 0; i < n; i++) {
+        // для уникальности генерируемых значений
         for (;;) {
             bool good = true;
             random = 1 + rand()%n;
@@ -21,11 +23,11 @@ void test_rand(int n) {
             if (good) break;
         }
         m[i] = random;
+        // вставка 
         bt.add(new Integer(m[i]));
     }
     cout << "items count: " << bt.size() << endl;
     double S = 0;
-    int pog10 = n;
     for (int i = 0; i < n/2; i++) {
         S += bt.search2(m[i]);
     }
@@ -40,7 +42,7 @@ int main() {
         start = clock();
         test_rand(i);
         end = clock();
-        cout << "Elapsed time - " << (double) (end-start) / CLOCKS_PER_SEC << " seconds.\n" << endl;
+        cout << "Elapsed time - " << (double) (end-start) / CLOCKS_PER_SEC << " seconds." << endl;
     }
     return 0;
 }

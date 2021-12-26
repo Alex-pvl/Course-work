@@ -8,60 +8,57 @@ using namespace std;
 
 class Date : public object {
 public:
-Date();
-Date(int, int, int);
-Date(int, int, int, int, int, int);
-int getDay();
-int getMonth();
-int getYear();
-int getHour();
-int getMinute();
-int getSecond();
-int getValue();
-void setYear(int);
-void setMonth(int);
-void setDay(int);
-void setHour(int);
-void setMinute(int);
-void setSecond(int);
-void incYear();
-void incMonth();
-void incDay();
-void incHour();
-void incMinutes();
-void incSecond();
-void decYear();
-void decMonth();
-void decDay();
-void decHour();
-void decMinute();
-void decSecond();
-// перевод строки в дату
-object* loadFromString(char*);
-// перевод даты в строку
-string uploadInString();
-// получение имени класса
-string getName();
-// получение идентификатора класса
-int getId();
-// сравнение двух объектов
-int equals(object*, object*);
-// сумма объектов
-object* unionObj(object*, object*);
-// создание копии объекта
-object* makeCopy(object*);
-// запись объекта в бинарный файл
-void writeInBinary(ofstream&);
-// чтение объекта из бинарного файла
-void readFromBinary(ifstream&);
-// ввод числа с клавиатуры
-void getObject();
-int getValueObj();
+    Date();
+    Date(int, int, int);
+    Date(int, int, int, int, int, int);
+    // геттеры полей
+    int getDay();
+    int getMonth();
+    int getYear();
+    int getHour();
+    int getMinute();
+    int getSecond();
+    int getValue();
+    // сеттеры полей
+    void setYear(int);
+    void setMonth(int);
+    void setDay(int);
+    void setHour(int);
+    void setMinute(int);
+    void setSecond(int);
+    // инкрементирование полей 
+    void incYear();
+    void incMonth();
+    void incDay();
+    void incHour();
+    void incMinutes();
+    void incSecond();
+    // перевод строки в дату
+    object* loadFromString(char*);
+    // перевод даты в строку
+    string uploadInString();
+    // получение имени класса
+    string getName();
+    // получение идентификатора класса
+    int getId();
+    // сравнение двух объектов
+    int equals(object*, object*);
+    // сумма объектов
+    object* unionObj(object*, object*);
+    // создание копии объекта
+    object* makeCopy(object*);
+    // запись объекта в бинарный файл
+    void writeInBinary(ofstream&);
+    // чтение объекта из бинарного файла
+    void readFromBinary(ifstream&);
+    // ввод числа с клавиатуры
+    void getObject();
+    int getValueObj();
 
-Date& operator=(const Date& d);
-friend ostream& operator<<(ostream&, Date&);
-friend istream& operator>>(istream&, Date&);
-~Date();
+    Date& operator=(const Date& d);
+    friend ostream& operator<<(ostream&, Date&);
+    friend istream& operator>>(istream&, Date&);
+    ~Date();
 private:
     int day;
     int mon;
@@ -288,82 +285,6 @@ void Date::incSecond() {
     }
 }
 
-void Date::decYear() { 
-    this->setYear(this->getYear() - 1); 
-}
-
-void Date::decMonth() {
-    if (this->getMonth() == 1) {
-        this->decYear();
-        this->setMonth(12); 
-    } else {
-        this->setMonth(this->getMonth() - 1);
-    }
-}
-
-void Date::decDay() {
-    if ((this->getMonth() == 5 || this->getMonth() == 7 ||
-    this->getMonth() == 10 || this->getMonth() == 12) && this->getDay() == 1) {
-        this->decMonth();
-        this->setDay(30);
-    } else if (this->getMonth() == 3) {
-        if (this->getYear() % 4 == 0) {
-            if (this->getYear() % 100 == 0 && this->getYear() % 400 != 0) {
-                if (this->getDay() == 1) {
-                    this->decMonth();
-                    this->setDay(28);
-                } else {
-                    this->setDay(this->getDay() - 1);
-                }
-            } else {
-                if (this->getDay() == 1) {
-                    this->decMonth();
-                    this->setDay(29);
-                } else {
-                    this->setDay(this->getDay() - 1);
-                }
-            }
-        } else if (this->getDay() == 1) {
-            this->decMonth();
-            this->setDay(28);
-        } else {
-            this->setDay(this->getDay() - 1);
-        }
-    } else if (this->getDay() == 1) {
-        this->decMonth();
-        this->setDay(31);
-    } else {
-        this->setDay(this->getDay() - 1);
-    }
-} 
-
-void Date::decHour() {
-    if (this->getHour() == 0) {
-        this->decDay();
-        this->setHour(23);
-    } else {
-        this->setHour(this->getHour() - 1);
-    }
-}
-
-void Date::decMinute() {
-    if (this->getMinute() == 0) {
-        this->decHour();
-        this->setMinute(59);
-    } else {
-        this->setMinute(this->getMinute() - 1);
-    }
-}
-
-void Date::decSecond() {
-    if (this->getSecond() == 0) {
-        this->decMinute();
-        this->setSecond(59);
-    } else {
-        this->setSecond(this->getSecond() - 1);
-    }
-}
-
 object* Date::loadFromString(char *date) {
     int day, mon, year, h, m, s;
     if (date[0] == 0) {
@@ -438,7 +359,7 @@ int Date::equals(object* o1, object* o2) {
         } else if (i == 2) {
             if (((Date*)o1)->getYear() % 4 == 0 || ((((Date*)o1)->getYear() % 100 != 0) && (((Date*)o1)->getYear() % 400 == 0))) {
                 first_d += 29;
-            } else second_d += 28;
+            } else first_d += 28;
         } else first_d += 31;
     }
     first_d += ((Date*)o1)->getDay();
@@ -463,7 +384,6 @@ int Date::equals(object* o1, object* o2) {
 
     second_s += 3600 * ((Date*)o2)->getHour() + 60 * ((Date*)o2)->getMinute() + ((Date*)o2)->getSecond();
 
-    
     if (first_d > second_d) return 1;
     else if (first_d < second_d) return -1;
     else {
@@ -475,28 +395,28 @@ int Date::equals(object* o1, object* o2) {
 
 object* Date::unionObj(object* o1, object* o2) {
     int sec = ((Date*)o1)->getSecond() + ((Date*)o2)->getSecond();
+    int min = ((Date*)o1)->getMinute() + ((Date*)o2)->getMinute();
+    int hours = ((Date*)o1)->getHour() + ((Date*)o2)->getHour();
+    int years = ((Date*)o1)->getYear() + ((Date*)o2)->getYear();
+    int months = ((Date*)o1)->getMonth() + ((Date*)o2)->getMonth();
+    int days = ((Date*)o1)->getDay() + ((Date*)o2)->getDay();
+    for (int i = 1; i < days; i++) {
+        this->incDay();
+    }
+    for (int i = 1; i < months; i++) {
+        this->incMonth();
+    }
+    for (int i = 1; i < years; i++) {
+        this->incYear();
+    }    
     for (int i = 0; i < sec; i++) {
         this->incSecond();
     }
-    int min = ((Date*)o1)->getMinute() + ((Date*)o2)->getMinute();
     for (int i = 0; i < min; i++) {
         this->incMinutes();
     }
-    int hours = ((Date*)o1)->getHour() + ((Date*)o2)->getHour();
     for (int i = 0; i < hours; i++) {
         this->incHour();
-    }
-    int years = ((Date*)o1)->getYear() + ((Date*)o2)->getYear() - 1;
-    for (int i = 0; i < years; i++) {
-        this->incYear();
-    }
-    int months = ((Date*)o1)->getMonth() + ((Date*)o2)->getMonth() - 1;
-    for (int i = 0; i < months; i++) {
-        this->incMonth();
-    }
-    int days = ((Date*)o1)->getDay() + ((Date*)o2)->getDay() - 1;
-    for (int i = 0; i < days; i++) {
-        this->incDay();
     }
     return this;
 }

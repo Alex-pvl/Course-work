@@ -48,6 +48,7 @@ public:
         root = nullptr;
         c = 0;
     }
+    // кол-во узлов в дереве
     int size() {
         if (root != nullptr) return root->count + 1;
         return 0;
@@ -55,10 +56,11 @@ public:
     // добавление
     bool add(object *obj) {
         Node *n = new Node(obj);
-        bool ins;
+        bool ins; //флаг об успешной/неуспешной вставке
         if (!n) {
             return false;
         }
+        // проверка на невалидность даты
         if (((Date*)obj)->getDay() == 1 && ((Date*)obj)->getMonth() == 1 && ((Date*)obj)->getYear() == 1 && 
         ((Date*)obj)->getHour() == 0 && ((Date*)obj)->getMinute() == 0 && ((Date*)obj)->getSecond() == 0) return false;
         root = insertNode(root, n, ins);
@@ -85,6 +87,7 @@ public:
         inserted = ins;
         return node;
     }
+    // кол-во пройденных узлов до найденного
     int search2(int k) {
         object* res = searchNode(root, k);
         if (res != nullptr) {
@@ -92,7 +95,7 @@ public:
             c = 0;
             return cc;
         } 
-        return -1;
+        return -1; // в случае отсутствия элемента в дереве
     }
     // поиск элемента в дереве
     object* search(int k) {
@@ -116,7 +119,7 @@ public:
     void show() {
         showNode(root, 0);
     }
-    // вывод узла
+    // распечатка rihgt -> root -> left
     void showNode(Node *t, int level) {
         if (t == nullptr) {
             return;
@@ -127,77 +130,15 @@ public:
         showNode(t->left, level+1);
     }
     // удаление элемента для пользователя
-    // bool deleteObj(object* obj) {
-    //     Node *n = new Node(obj);
-    //     bool del;
-    //     root = deleteNodes(root, n, del);
-    //     if (del) cout << "Object was deleted.\n";
-    //     else cout << "Error.\n";
-    //     return del;
-    // }
-    // Node* Del(Node *t, Node *t0) {
-    //     if (t->left != nullptr) {
-    //         t->left = Del(t->left, t0);
-    //         return t;
-    //     }
-    //     t0->key = t->key;
-    //     t0->o = t->o;
-        
-    //     Node *x = t->right;
-    //     delete t;
-    //     return x;
-    // }
-    // // удаление узла
-    // Node* deleteNodes(Node *r, Node *elem, bool &deleted) {
-    //     bool del;
-    //     if (r == nullptr) {
-    //         deleted = false;
-    //         return r;
-    //     } 
-    //     if (equal(elem->o, r->o) < 0) {
-    //         r->left = deleteNodes(r->left, elem, del);
-            
-    //         deleted = del;
-    //         //if (deleted) r->count--;
-    //         return r;
-    //     }
-    //     if (equal(elem->o, r->o) > 0) {
-    //         r->right = deleteNodes(r->right, elem, del);
-            
-    //         deleted = del;
-    //         //if (deleted) r->count--;
-    //         return r;
-    //     }
-    //     deleted = true;
-    //     if (del) r->count--;
-    //     if (r->left == nullptr && r->right == nullptr) {
-    //         delete r;
-    //         return nullptr;
-    //     }
-    //     if (r->left == nullptr) {
-    //         Node *x = r->right;
-    //         x->count--;
-    //         delete r;
-    //         return x;
-    //     }
-    //     if (r->right == nullptr) {
-    //         Node *x = r->left;
-    //         x->count--;
-    //         delete r;
-    //         return x;
-    //     }
-        
-    //     r->right = Del(r->right, r);
-        
-    //     return r;
-    // }
     void del(object* obj) {
         root = deleteNode(root, obj);
     }
+    // поиск минимального для замены
     Node* FindMin(Node* r) {
         while (r->left != nullptr) r = r->left;
         return r;
     }
+    // рекурсивное удаление узла
     Node* deleteNode(Node* r, object* obj) {
         if (r == nullptr) return r;
         else if (equal(obj, r->o) < 0) {
@@ -208,36 +149,32 @@ public:
             r->count--;
             r->right = deleteNode(r->right, obj); 
         } 
-
+        // нашли, что удалять
         else {
-            //r->count--;
+            // лепесток
             if (r->left == nullptr && r->right == nullptr) {
-                
                 delete r;
                 r = nullptr;
             }
-
+            // один сын
             else if(r->left == nullptr) {
                 r->count--;
                 Node* tmp = r;
                 r = r->right;
-                
                 delete tmp;
             }
             else if(r->right == nullptr) {
                 r->count--;
                 Node* tmp = r;
                 r = r->left;
-               
                 delete tmp;
             }
-
+            // оба сына
             else {
                 Node* tmp = FindMin(r->right);
                 r->count--;
                 r->o = tmp->o;
                 r->key = tmp->key;
-                
                 r->right = deleteNode(r->right, tmp->o);
             }
         }
@@ -257,6 +194,7 @@ public:
         if (t == nullptr) {
             return;
         }
+        // получаем ID объекта
         int key = t->o->getId();
         fout.write((char*)&key, sizeof(int));
         t->o->writeInBinary(fout);
@@ -274,6 +212,7 @@ public:
     }
     // чтение структуры из бинарного файла 
     void readFromB(ifstream& fin) {
+        // считываем, пока не конец файла
         while (true) {
             int key;
             object *obj;
@@ -291,6 +230,7 @@ public:
     // деструктор
     ~Btree() {
         delete root;
+        c = 0;
     }
 private:
     Node *root;
